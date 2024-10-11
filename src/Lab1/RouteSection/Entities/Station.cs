@@ -9,10 +9,10 @@ public class Station : IRouteSection
     private readonly Time _breakTime;
     private readonly Speed _maxSpeed;
 
-    public Station(double breakTime, double maxSpeed)
+    public Station(Time breakTime, Speed maxSpeed)
     {
-        _breakTime = new Time(breakTime);
-        _maxSpeed = new Speed(maxSpeed);
+        _breakTime = breakTime;
+        _maxSpeed = maxSpeed;
     }
 
     public PassRouteSectionResult PassResult(TrainInfo.Entities.Train train)

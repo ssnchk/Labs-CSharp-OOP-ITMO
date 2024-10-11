@@ -2,6 +2,8 @@
 
 public class Weight
 {
+    public static Weight Zero { get; } = new Weight(0);
+
     public double WeightValue { get; }
 
     public Weight(double weight)

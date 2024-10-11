@@ -9,5 +9,5 @@ public abstract record class PassRouteResult
 
     public sealed record Success(Time RideTime) : PassRouteResult;
 
-    public sealed record Failure(ITrainActionResult FailureResult) : PassRouteResult;
+    public sealed record Failure(ITrainActionResult TrainActionResult) : PassRouteResult;
 }

@@ -9,10 +9,10 @@ public class PowerMagneticRoad : IRouteSection
     private readonly Distance _distance;
     private readonly Strength _appliedForce;
 
-    public PowerMagneticRoad(double distance, double appliedForce)
+    public PowerMagneticRoad(Distance distance, Strength appliedForce)
     {
-        _distance = new Distance(distance);
-        _appliedForce = new Strength(appliedForce);
+        _distance = distance;
+        _appliedForce = appliedForce;
     }
 
     public PassRouteSectionResult PassResult(TrainInfo.Entities.Train train)
@@ -22,11 +22,11 @@ public class PowerMagneticRoad : IRouteSection
 
         PassDistanceResult passDistanceResult = train.PassDistance(_distance);
 
-        if (passDistanceResult is PassDistanceResult.Failure passDistanceResultFailure)
-            return new PassRouteSectionResult.Failure(passDistanceResultFailure);
+        if (passDistanceResult is not PassDistanceResult.Success passDistanceResultSuccess)
+            return new PassRouteSectionResult.Failure(new PassDistanceResult.Failure());
 
-        train.ApplyForce(new Strength(0));
+        train.ApplyForce(Strength.Zero);
 
-        return new PassRouteSectionResult.Success(((PassDistanceResult.Success)passDistanceResult).RideTime);
+        return new PassRouteSectionResult.Success(passDistanceResultSuccess.RideTime);
     }
 }

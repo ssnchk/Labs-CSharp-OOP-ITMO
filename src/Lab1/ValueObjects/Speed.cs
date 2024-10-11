@@ -2,6 +2,8 @@
 
 public class Speed
 {
+    public static Speed Zero { get; } = new Speed(0);
+
     public double SpeedValue { get; }
 
     public Speed(double speed)

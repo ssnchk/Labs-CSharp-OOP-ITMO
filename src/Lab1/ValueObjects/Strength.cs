@@ -2,6 +2,8 @@
 
 public class Strength
 {
+    public static Strength Zero { get; } = new Strength(0);
+
     public double StrengthValue { get; }
 
     public Strength(double strength)

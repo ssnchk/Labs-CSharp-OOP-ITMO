@@ -2,6 +2,8 @@
 
 public class Distance
 {
+    public static Distance Zero { get; } = new Distance(0);
+
     public double DistanceValue { get; }
 
     public Distance(double distance)

@@ -2,6 +2,8 @@
 
 public class Time
 {
+    public static Time Zero { get; } = new Time(0);
+
     public double TimeValue { get; }
 
     public Time(double time)

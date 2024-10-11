@@ -2,6 +2,8 @@
 
 public class Acceleration
 {
+    public static Acceleration Zero { get; } = new Acceleration(0);
+
     public double AccelerationValue { get; }
 
     public Acceleration(double acceleration)

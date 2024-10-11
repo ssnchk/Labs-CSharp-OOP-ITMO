@@ -8,18 +8,18 @@ public class MagneticRoad : IRouteSection
 {
     private readonly Distance _distance;
 
-    public MagneticRoad(double distance)
+    public MagneticRoad(Distance distance)
     {
-        _distance = new Distance(distance);
+        _distance = distance;
     }
 
     public PassRouteSectionResult PassResult(TrainInfo.Entities.Train train)
     {
         PassDistanceResult passDistanceResult = train.PassDistance(_distance);
 
-        if (passDistanceResult is PassDistanceResult.Failure passDistanceResultFailure)
-            return new PassRouteSectionResult.Failure(passDistanceResultFailure);
+        if (passDistanceResult is PassDistanceResult.Success passDistanceResultSuccess)
+            return new PassRouteSectionResult.Success(passDistanceResultSuccess.RideTime);
 
-        return new PassRouteSectionResult.Success(((PassDistanceResult.Success)passDistanceResult).RideTime);
+        return new PassRouteSectionResult.Failure(new PassDistanceResult.Failure());
     }
 }

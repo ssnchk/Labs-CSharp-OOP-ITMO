@@ -11,10 +11,10 @@ public class Route
     private readonly IReadOnlyCollection<IRouteSection> _sections;
     private readonly Speed _maxBreakSpeed;
 
-    public Route(IReadOnlyCollection<IRouteSection> sections, double maxBreakSpeed)
+    public Route(IReadOnlyCollection<IRouteSection> sections, Speed maxBreakSpeed)
     {
         _sections = sections;
-        _maxBreakSpeed = new Speed(maxBreakSpeed);
+        _maxBreakSpeed = maxBreakSpeed;
     }
 
     public PassRouteResult PassRoute(TrainInfo.Entities.Train train)
@@ -23,10 +23,10 @@ public class Route
         foreach (IRouteSection section in _sections)
         {
             PassRouteSectionResult passingSectionResult = section.PassResult(train);
-            if (passingSectionResult is PassRouteSectionResult.Failure passRouteSectionResult)
-                return new PassRouteResult.Failure(passRouteSectionResult.Result);
-
-            rideTime += ((PassRouteSectionResult.Success)passingSectionResult).RideTime;
+            if (passingSectionResult is PassRouteSectionResult.Failure passRouteSectionFailure)
+                return new PassRouteResult.Failure(passRouteSectionFailure.Result);
+            if (passingSectionResult is PassRouteSectionResult.Success passRouteSectionSuccess)
+                rideTime += passRouteSectionSuccess.RideTime;
         }
 
         StopTrainResult stopTrainResult = train.StopTrain(_maxBreakSpeed);
