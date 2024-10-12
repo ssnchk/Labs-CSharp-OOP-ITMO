@@ -35,9 +35,4 @@ public class Strength
     {
         return strength1.StrengthValue <= strength2.StrengthValue;
     }
-
-    public static Acceleration operator /(Strength strength, Weight weight)
-    {
-        return new Acceleration(strength.StrengthValue / weight.WeightValue);
-    }
 }

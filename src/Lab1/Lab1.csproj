@@ -4,12 +4,4 @@
         <RootNamespace>Itmo.ObjectOrientedProgramming.Lab1</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="RouteSection\Entities\" />
-      <Folder Include="RouteSection\Models\" />
-      <Folder Include="RouteInfo\Entities\" />
-      <Folder Include="RouteInfo\Models\" />
-      <Folder Include="TrainInfo\Entities\" />
-    </ItemGroup>
-
 </Project>

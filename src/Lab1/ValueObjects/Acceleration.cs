@@ -35,9 +35,4 @@ public class Acceleration
     {
         return acceleration1.AccelerationValue <= acceleration2.AccelerationValue;
     }
-
-    public static Speed operator *(Acceleration acceleration, Time time)
-    {
-        return new Speed(acceleration.AccelerationValue * time.TimeValue);
-    }
 }

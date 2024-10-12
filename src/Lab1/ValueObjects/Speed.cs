@@ -35,9 +35,4 @@ public class Speed
     {
         return speed1.SpeedValue <= speed2.SpeedValue;
     }
-
-    public static Distance operator *(Speed speed, Time time)
-    {
-        return new Distance(speed.SpeedValue * time.TimeValue);
-    }
 }

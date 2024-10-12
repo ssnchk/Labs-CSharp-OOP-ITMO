@@ -6,10 +6,10 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.RouteSection.Entities;
 
 public class Station : IRouteSection
 {
-    private readonly Time _breakTime;
+    private readonly TimeSpan _breakTime;
     private readonly Speed _maxSpeed;
 
-    public Station(Time breakTime, Speed maxSpeed)
+    public Station(TimeSpan breakTime, Speed maxSpeed)
     {
         _breakTime = breakTime;
         _maxSpeed = maxSpeed;

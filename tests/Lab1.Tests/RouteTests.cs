@@ -16,7 +16,7 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(10);
 
         var train = new Train(trainWeight, trainMaxStrength, trainAccuracy);
@@ -44,7 +44,7 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(9);
 
         var firstSection = new PowerMagneticRoad(new Distance(100), new Strength(100));
@@ -73,12 +73,12 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(10);
 
         var firstSection = new PowerMagneticRoad(new Distance(100), new Strength(10));
         var secondSection = new MagneticRoad(new Distance(100));
-        var thirdSection = new Station(new Time(5), new Speed(10));
+        var thirdSection = new Station(new TimeSpan(5), new Speed(10));
         var fourthSection = new MagneticRoad(new Distance(100));
         var train = new Train(trainWeight, trainMaxStrength, trainAccuracy);
 
@@ -105,11 +105,11 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(10);
 
         var firstSection = new PowerMagneticRoad(new Distance(100), new Strength(100));
-        var secondSection = new Station(new Time(5), new Speed(9));
+        var secondSection = new Station(new TimeSpan(5), new Speed(9));
         var thirdSection = new MagneticRoad(new Distance(100));
         var train = new Train(trainWeight, trainMaxStrength, trainAccuracy);
 
@@ -136,12 +136,12 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(9);
 
         var firstSection = new PowerMagneticRoad(new Distance(100), new Strength(100));
         var secondSection = new MagneticRoad(new Distance(100));
-        var thirdSection = new Station(new Time(5), new Speed(10));
+        var thirdSection = new Station(new TimeSpan(5), new Speed(10));
         var fourthSection = new MagneticRoad(new Distance(100));
         var train = new Train(trainWeight, trainMaxStrength, trainAccuracy);
         var route = new Route(
@@ -168,13 +168,13 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(20);
 
         var firstSection = new PowerMagneticRoad(new Distance(100), new Strength(100));
         var secondSection = new MagneticRoad(new Distance(100));
         var thirdSection = new PowerMagneticRoad(new Distance(100), new Strength(-10));
-        var fourthSection = new Station(new Time(5), new Speed(19));
+        var fourthSection = new Station(new TimeSpan(5), new Speed(19));
         var fifthSection = new MagneticRoad(new Distance(100));
         var sixthSection = new PowerMagneticRoad(new Distance(100), new Strength(10));
         var seventhSection = new MagneticRoad(new Distance(100));
@@ -208,7 +208,7 @@ public class RouteTests
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(10);
 
         var firstSection = new MagneticRoad(new Distance(100));
@@ -235,7 +235,7 @@ PassRoute_ShouldReturnFailure_WhenTrainPassesPowerMagneticRoadWithDistanceXAndAp
         // arrange
         var trainWeight = new Weight(100);
         var trainMaxStrength = new Strength(100);
-        var trainAccuracy = new Time(10);
+        var trainAccuracy = new TimeSpan(10);
         var maxRouteStopSpeed = new Speed(10);
 
         var firstSection = new PowerMagneticRoad(new Distance(x), new Strength(y));

@@ -1,6 +1,7 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab1.RouteInfo.Models;
 using Itmo.ObjectOrientedProgramming.Lab1.RouteSection.Entities;
 using Itmo.ObjectOrientedProgramming.Lab1.RouteSection.Models;
+using Itmo.ObjectOrientedProgramming.Lab1.TrainInfo.Entities;
 using Itmo.ObjectOrientedProgramming.Lab1.TrainInfo.Models;
 using Itmo.ObjectOrientedProgramming.Lab1.ValueObjects;
 
@@ -17,14 +18,16 @@ public class Route
         _maxBreakSpeed = maxBreakSpeed;
     }
 
-    public PassRouteResult PassRoute(TrainInfo.Entities.Train train)
+    public PassRouteResult PassRoute(Train train)
     {
-        var rideTime = new Time(0);
+        var rideTime = new TimeSpan(0);
         foreach (IRouteSection section in _sections)
         {
             PassRouteSectionResult passingSectionResult = section.PassResult(train);
+
             if (passingSectionResult is PassRouteSectionResult.Failure passRouteSectionFailure)
                 return new PassRouteResult.Failure(passRouteSectionFailure.Result);
+
             if (passingSectionResult is PassRouteSectionResult.Success passRouteSectionSuccess)
                 rideTime += passRouteSectionSuccess.RideTime;
         }

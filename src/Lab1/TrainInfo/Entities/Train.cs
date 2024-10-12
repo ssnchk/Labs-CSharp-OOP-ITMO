@@ -7,11 +7,11 @@ public class Train
 {
     private readonly Weight _weight;
     private readonly Strength _maxStrength;
-    private readonly Time _accuracy;
+    private readonly TimeSpan _accuracy;
     private Speed _speed;
     private Acceleration _acceleration;
 
-    public Train(Weight weight, Strength maxStrength, Time accuracy)
+    public Train(Weight weight, Strength maxStrength, TimeSpan accuracy)
     {
         _weight = weight;
         _maxStrength = maxStrength;
@@ -25,7 +25,7 @@ public class Train
         if (strengthValue > _maxStrength)
             return new ApplyForceResult.Failure();
 
-        _acceleration = strengthValue / _weight;
+        _acceleration = new Acceleration(strengthValue.StrengthValue / _weight.WeightValue);
 
         return new ApplyForceResult.Success();
     }
@@ -36,15 +36,15 @@ public class Train
             return new PassDistanceResult.Failure();
 
         Distance distanceTraveled = Distance.Zero;
-        Time passingTime = Time.Zero;
+        TimeSpan passingTime = TimeSpan.Zero;
 
         while (distanceTraveled < distance)
         {
             passingTime += _accuracy;
-            _speed += _acceleration * _accuracy;
+            _speed += new Speed(_acceleration.AccelerationValue * _accuracy.TotalSeconds);
             if (_speed < Speed.Zero)
                 return new PassDistanceResult.Failure();
-            distanceTraveled += _speed * _accuracy;
+            distanceTraveled += new Distance(_speed.SpeedValue * _accuracy.TotalSeconds);
         }
 
         return new PassDistanceResult.Success(passingTime);
