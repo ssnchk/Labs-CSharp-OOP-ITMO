@@ -13,7 +13,7 @@ public interface ILectureMaterial
 
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public User Author { get; }
 

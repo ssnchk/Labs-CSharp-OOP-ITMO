@@ -7,7 +7,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects.Builders;
 
 public class ExamSubjectBuilder : ISubjectsBuilder
 {
-    private readonly Guid? _initialId = null;
+    private readonly Guid? _parentId = null;
     private readonly List<ILaboratoryWork> _laboratoryWorks = [];
     private readonly List<ILectureMaterial> _lectureMaterials = [];
 
@@ -57,7 +57,7 @@ public class ExamSubjectBuilder : ISubjectsBuilder
         return new ExamSubject(
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),
-            _initialId,
+            _parentId,
             _laboratoryWorks,
             _lectureMaterials,
             _examPoints ?? throw new ArgumentNullException(nameof(_examPoints)),

@@ -1,6 +1,6 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public class DictionaryRepository<T> : IRepository<T>
+public class InMemoryRepository<T> : IRepository<T>
 {
     private readonly Dictionary<Guid, T> _items = [];
 

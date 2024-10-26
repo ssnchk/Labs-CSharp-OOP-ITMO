@@ -16,7 +16,7 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         Author = author;
         Name = name;
         Id = id;
-        InitialId = initialId;
+        ParentId = initialId;
         Description = description;
         Content = content;
     }
@@ -29,7 +29,7 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
 
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public User Author { get; }
 

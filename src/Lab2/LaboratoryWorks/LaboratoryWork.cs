@@ -21,12 +21,12 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         PointsAmount = pointsAmount;
         Description = description;
         Criterias = criterias;
-        InitialId = initialId;
+        ParentId = initialId;
     }
 
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public IReadOnlyCollection<string> Criterias { get; private set; }
 

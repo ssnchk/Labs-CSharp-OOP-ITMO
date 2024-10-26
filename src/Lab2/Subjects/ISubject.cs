@@ -17,7 +17,7 @@ public interface ISubject
 
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public SetNameResult SetName(string name, User user);
 }

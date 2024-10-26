@@ -4,7 +4,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials.Builders;
 
 public class LectureMaterialBuilder
 {
-    private readonly Guid? _initialId = null;
+    private readonly Guid? _parentId = null;
 
     private string? _content;
     private string? _name;
@@ -49,7 +49,7 @@ public class LectureMaterialBuilder
             _author ?? throw new ArgumentNullException(nameof(_author)),
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),
-            _initialId,
+            _parentId,
             _description ?? throw new ArgumentNullException(nameof(_description)),
             _content ?? throw new ArgumentNullException(nameof(_content)));
     }

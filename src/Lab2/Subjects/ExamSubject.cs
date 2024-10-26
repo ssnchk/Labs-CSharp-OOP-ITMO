@@ -14,7 +14,7 @@ public class ExamSubject : ISubject<ExamSubject>
     public ExamSubject(
         string name,
         Guid id,
-        Guid? initialId,
+        Guid? parentId,
         IReadOnlyCollection<ILaboratoryWork> laboratoryWorks,
         IReadOnlyCollection<ILectureMaterial> lectureMaterials,
         Points examPoints,
@@ -28,7 +28,7 @@ public class ExamSubject : ISubject<ExamSubject>
         LectureMaterials = lectureMaterials;
         Author = author;
         Id = id;
-        InitialId = initialId;
+        ParentId = parentId;
         ExamPoints = examPoints;
     }
 
@@ -42,7 +42,7 @@ public class ExamSubject : ISubject<ExamSubject>
 
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public Points ExamPoints { get; }
 

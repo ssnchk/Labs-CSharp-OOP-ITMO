@@ -5,7 +5,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks.Builders;
 
 public class LaboratoryWorkBuilder
 {
-    private readonly Guid? _initialId = null;
+    private readonly Guid? _parentId = null;
     private readonly List<string> _criteria = [];
 
     private string? _name;
@@ -57,7 +57,7 @@ public class LaboratoryWorkBuilder
             _author ?? throw new ArgumentNullException(nameof(_author)),
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),
-            _initialId,
+            _parentId,
             _pointsAmount ?? throw new ArgumentNullException(nameof(_pointsAmount)),
             _description ?? throw new ArgumentNullException(nameof(_description)),
             _criteria);

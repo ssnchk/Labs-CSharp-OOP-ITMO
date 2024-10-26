@@ -8,7 +8,7 @@ public interface ILaboratoryWork
 {
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public IReadOnlyCollection<string> Criterias { get; }
 

@@ -14,7 +14,7 @@ public class TestSubject : ISubject<TestSubject>
     public TestSubject(
         string name,
         Guid id,
-        Guid? initialId,
+        Guid? parentId,
         IReadOnlyCollection<ILaboratoryWork> laboratoryWorks,
         IReadOnlyCollection<ILectureMaterial> lectureMaterials,
         Points minSuccessPoints,
@@ -29,7 +29,7 @@ public class TestSubject : ISubject<TestSubject>
         Author = author;
         Id = id;
         MinSuccessPoints = minSuccessPoints;
-        InitialId = initialId;
+        ParentId = parentId;
     }
 
     public string Name { get; private set; }
@@ -44,7 +44,7 @@ public class TestSubject : ISubject<TestSubject>
 
     public Guid Id { get; }
 
-    public Guid? InitialId { get; }
+    public Guid? ParentId { get; }
 
     public SetNameResult SetName(string name, User user)
     {

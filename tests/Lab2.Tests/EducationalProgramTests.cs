@@ -163,7 +163,7 @@ public class EducationalProgramTests
 
         // Assert
         Assert.NotEqual(laboratoryWork.Id, clonedLaboratoryWorkWithNewId.Id);
-        Assert.Equal(laboratoryWork.Id, clonedLaboratoryWorkWithNewId.InitialId);
+        Assert.Equal(laboratoryWork.Id, clonedLaboratoryWorkWithNewId.ParentId);
 
         Assert.Throws<ArgumentException>(() => laboratoryWork.Clone(originalId, author));
     }
@@ -190,7 +190,7 @@ public class EducationalProgramTests
 
         // Assert
         Assert.NotEqual(lectureMaterial.Id, clonedLectureMaterialWithNewId.Id);
-        Assert.Equal(lectureMaterial.Id, clonedLectureMaterialWithNewId.InitialId);
+        Assert.Equal(lectureMaterial.Id, clonedLectureMaterialWithNewId.ParentId);
 
         Assert.Throws<ArgumentException>(() => lectureMaterial.Clone(originalId, author));
     }
@@ -235,10 +235,10 @@ public class EducationalProgramTests
 
         // Assert
         Assert.NotEqual(examSubject.Id, clonedSubjectWithNewId.Id);
-        Assert.Equal(examSubject.Id, clonedSubjectWithNewId.InitialId);
+        Assert.Equal(examSubject.Id, clonedSubjectWithNewId.ParentId);
 
         Assert.NotEqual(testSubject.Id, clonedSubjectWithNewId2.Id);
-        Assert.Equal(testSubject.Id, clonedSubjectWithNewId2.InitialId);
+        Assert.Equal(testSubject.Id, clonedSubjectWithNewId2.ParentId);
 
         Assert.Throws<ArgumentException>(() => examSubject.Clone(originalId, author));
         Assert.Throws<ArgumentException>(() => testSubject.Clone(originalId, author));
