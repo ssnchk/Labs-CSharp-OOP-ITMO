@@ -23,11 +23,6 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         Content = content;
     }
 
-    public LectureMaterial Clone(Guid newId, User newAuthor)
-    {
-        throw new NotImplementedException();
-    }
-
     public string Name { get; private set; }
 
     public string Content { get; private set; }
