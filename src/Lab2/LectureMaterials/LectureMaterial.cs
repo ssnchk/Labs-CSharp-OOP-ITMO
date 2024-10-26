@@ -5,18 +5,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials;
 
 public class LectureMaterial : ILectureMaterial<LectureMaterial>
 {
-    public string Name { get; private set; }
-
-    public string Content { get; private set; }
-
-    public string Description { get; private set; }
-
-    public Guid Id { get; }
-
-    public Guid? InitialId { get; }
-
-    public User Author { get; }
-
     public LectureMaterial(
         User author,
         string name,
@@ -32,6 +20,18 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         Description = description;
         Content = content;
     }
+
+    public string Name { get; private set; }
+
+    public string Content { get; private set; }
+
+    public string Description { get; private set; }
+
+    public Guid Id { get; }
+
+    public Guid? InitialId { get; }
+
+    public User Author { get; }
 
     public SetNameResult SetName(string name, User user)
     {

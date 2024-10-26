@@ -1,6 +1,6 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T>
 {
     public GetItemResult<T> GetItem(Guid id);
 

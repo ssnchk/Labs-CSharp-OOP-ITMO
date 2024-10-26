@@ -6,20 +6,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
 
 public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
 {
-    public Guid Id { get; }
-
-    public Guid? InitialId { get; }
-
-    public IReadOnlyCollection<string> Criterias { get; private set; }
-
-    public string Name { get; private set; }
-
-    public string Description { get; private set; }
-
-    public Points PointsAmount { get; }
-
-    public User Author { get; }
-
     public LaboratoryWork(
         User author,
         string name,
@@ -37,6 +23,20 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         Criterias = criterias;
         InitialId = initialId;
     }
+
+    public Guid Id { get; }
+
+    public Guid? InitialId { get; }
+
+    public IReadOnlyCollection<string> Criterias { get; private set; }
+
+    public string Name { get; private set; }
+
+    public string Description { get; private set; }
+
+    public Points PointsAmount { get; }
+
+    public User Author { get; }
 
     public SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias, User user)
     {

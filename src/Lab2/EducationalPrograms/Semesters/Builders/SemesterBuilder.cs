@@ -3,21 +3,21 @@ using Itmo.ObjectOrientedProgramming.Lab2.ValueObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.EducationalPrograms.Semesters.Builders;
 
-public class SemesterBuilder : ISemesterBuilder
+public class SemesterBuilder
 {
+    private readonly List<ISubject> _subjects = [];
+
     private SemesterNumber? _number;
 
-    private IReadOnlyCollection<ISubject>? _subjects;
-
-    public ISemesterBuilder WithNumber(SemesterNumber number)
+    public SemesterBuilder WithNumber(SemesterNumber number)
     {
         _number = number;
         return this;
     }
 
-    public ISemesterBuilder WithSubjects(IReadOnlyCollection<ISubject> subjects)
+    public SemesterBuilder AddSubject(ISubject subjects)
     {
-        _subjects = subjects;
+        _subjects.Add(subjects);
         return this;
     }
 

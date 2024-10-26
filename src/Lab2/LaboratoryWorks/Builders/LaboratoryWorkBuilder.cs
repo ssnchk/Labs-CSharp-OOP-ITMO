@@ -3,50 +3,49 @@ using Itmo.ObjectOrientedProgramming.Lab2.ValueObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks.Builders;
 
-public class LaboratoryWorkBuilder : ILaboratoryWorkBuilder
+public class LaboratoryWorkBuilder
 {
     private readonly Guid? _initialId = null;
-
     private readonly List<string> _criteria = [];
+
     private string? _name;
     private string? _description;
 
     private Guid? _id;
     private Points? _pointsAmount;
-
     private User? _author;
 
-    public ILaboratoryWorkBuilder WithName(string name)
+    public LaboratoryWorkBuilder WithName(string name)
     {
         _name = name;
         return this;
     }
 
-    public ILaboratoryWorkBuilder WithDescription(string description)
+    public LaboratoryWorkBuilder WithDescription(string description)
     {
         _description = description;
         return this;
     }
 
-    public ILaboratoryWorkBuilder WithId(Guid id)
+    public LaboratoryWorkBuilder WithId(Guid id)
     {
         _id = id;
         return this;
     }
 
-    public ILaboratoryWorkBuilder WithPointsAmount(Points pointsAmount)
+    public LaboratoryWorkBuilder WithPointsAmount(Points pointsAmount)
     {
         _pointsAmount = pointsAmount;
         return this;
     }
 
-    public ILaboratoryWorkBuilder AddCriteria(string criteria)
+    public LaboratoryWorkBuilder AddCriteria(string criteria)
     {
         _criteria.Add(criteria);
         return this;
     }
 
-    public ILaboratoryWorkBuilder WithAuthor(User author)
+    public LaboratoryWorkBuilder WithAuthor(User author)
     {
         _author = author;
         return this;

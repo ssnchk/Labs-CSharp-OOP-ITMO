@@ -1,20 +1,34 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.Models;
-using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
+using Itmo.ObjectOrientedProgramming.Lab2.ValueObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
 
-public interface ILaboratoryWork : IWithAuthor, IWithId, IWithInitialId, IWithDescription, IWithPointsAmount, IWithCriterias, IWithName
+public interface ILaboratoryWork
 {
-    public SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias, User user);
+    public Guid Id { get; }
 
-    public SetNameResult SetName(string name, User user);
+    public Guid? InitialId { get; }
 
-    public SetDescriptionResult SetDescription(string description, User user);
+    public IReadOnlyCollection<string> Criterias { get; }
+
+    public string Name { get; }
+
+    public string Description { get; }
+
+    public Points PointsAmount { get; }
+
+    public User Author { get; }
+
+    SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias, User user);
+
+    SetNameResult SetName(string name, User user);
+
+    SetDescriptionResult SetDescription(string description, User user);
 }
 
 public interface ILaboratoryWork<out T> : ILaboratoryWork
     where T : ILaboratoryWork<T>
 {
-    public T Clone(Guid newId, User newAuthor);
+    T Clone(Guid newId, User newAuthor);
 }

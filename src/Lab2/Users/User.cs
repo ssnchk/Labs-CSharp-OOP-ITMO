@@ -1,6 +1,6 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Users;
 
-public class User
+public record User
 {
     public Guid Id { get; }
 
@@ -10,19 +10,5 @@ public class User
     {
         Name = name;
         Id = id;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is null) return false;
-
-        if (obj is not User user) return false;
-
-        return user.Id == Id && user.Name == Name;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Id, Name);
     }
 }

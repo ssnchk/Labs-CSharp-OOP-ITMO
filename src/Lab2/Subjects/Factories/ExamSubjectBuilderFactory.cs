@@ -2,10 +2,10 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects.Factories;
 
-public class TestSubjectFactory : ISubjectFactory
+public class ExamSubjectBuilderFactory : ISubjectBuilderFactory
 {
     public ISubjectsBuilder Create()
     {
-        return new TestSubjectBuilder();
+        return new ExamSubjectBuilder();
     }
 }

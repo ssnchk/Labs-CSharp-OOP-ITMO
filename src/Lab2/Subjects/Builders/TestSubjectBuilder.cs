@@ -8,17 +8,12 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects.Builders;
 public class TestSubjectBuilder : ISubjectsBuilder
 {
     private readonly Guid? initialId = null;
-
     private readonly List<ILaboratoryWork> _laboratoryWorks = [];
-
     private readonly List<ILectureMaterial> _lectureMaterials = [];
 
     private Points? _minSuccessPoints;
-
     private string? _name;
-
     private User? _author;
-
     private Guid? _id;
 
     public ISubjectsBuilder WithMinSuccessPoints(Points? minSuccessPoints)
@@ -59,9 +54,6 @@ public class TestSubjectBuilder : ISubjectsBuilder
 
     public ISubject Build()
     {
-        if (_laboratoryWorks.Sum(laboratoryWork => laboratoryWork.PointsAmount.Value) != ISubject.MaxSubjectPoints().Value)
-            throw new ArgumentException("Sum of points of laboratory works is not equal to exam points.");
-
         return new TestSubject(
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),

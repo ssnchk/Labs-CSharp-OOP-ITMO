@@ -1,13 +1,23 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.Models;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
+using Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials;
 using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
-using Itmo.ObjectOrientedProgramming.Lab2.ValueObjects;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects;
 
-public interface ISubject : IWithAuthor, IWithId, IWithInitialId, IWithLaboratoryWorks, IWithLectureMaterials, IWithName
+public interface ISubject
 {
-    public static Points MaxSubjectPoints() => new Points(100);
+    public string Name { get; }
+
+    public IReadOnlyCollection<ILaboratoryWork> LaboratoryWorks { get; }
+
+    public IReadOnlyCollection<ILectureMaterial> LectureMaterials { get; }
+
+    public User Author { get; }
+
+    public Guid Id { get; }
+
+    public Guid? InitialId { get; }
 
     public SetNameResult SetName(string name, User user);
 }

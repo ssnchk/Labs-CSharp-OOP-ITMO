@@ -2,7 +2,7 @@
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials.Builders;
 
-public class LectureMaterialBuilder : ILectureMaterialBuilder
+public class LectureMaterialBuilder
 {
     private readonly Guid? _initialId = null;
 
@@ -11,34 +11,33 @@ public class LectureMaterialBuilder : ILectureMaterialBuilder
     private string? _description;
 
     private Guid? _id;
-
     private User? _author;
 
-    public ILectureMaterialBuilder WithAuthor(User author)
+    public LectureMaterialBuilder WithAuthor(User author)
     {
         _author = author;
         return this;
     }
 
-    public ILectureMaterialBuilder WithName(string name)
+    public LectureMaterialBuilder WithName(string name)
     {
         _name = name;
         return this;
     }
 
-    public ILectureMaterialBuilder WithDescription(string description)
+    public LectureMaterialBuilder WithDescription(string description)
     {
         _description = description;
         return this;
     }
 
-    public ILectureMaterialBuilder WithId(Guid id)
+    public LectureMaterialBuilder WithId(Guid id)
     {
         _id = id;
         return this;
     }
 
-    public ILectureMaterialBuilder WithContext(string context)
+    public LectureMaterialBuilder WithContext(string context)
     {
         _content = context;
         return this;

@@ -8,6 +8,30 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects;
 
 public class ExamSubject : ISubject<ExamSubject>
 {
+    public static Points MaxSubjectPoints()
+        => new Points(100);
+
+    public ExamSubject(
+        string name,
+        Guid id,
+        Guid? initialId,
+        IReadOnlyCollection<ILaboratoryWork> laboratoryWorks,
+        IReadOnlyCollection<ILectureMaterial> lectureMaterials,
+        Points examPoints,
+        User author)
+    {
+        if (laboratoryWorks.Sum(laboratoryWork => laboratoryWork.PointsAmount.Value) != MaxSubjectPoints().Value)
+            throw new ArgumentException("Sum of points of laboratory works is not equal to exam points.");
+
+        Name = name;
+        LaboratoryWorks = laboratoryWorks;
+        LectureMaterials = lectureMaterials;
+        Author = author;
+        Id = id;
+        InitialId = initialId;
+        ExamPoints = examPoints;
+    }
+
     public string Name { get; private set; }
 
     public IReadOnlyCollection<ILaboratoryWork> LaboratoryWorks { get; }
@@ -21,24 +45,6 @@ public class ExamSubject : ISubject<ExamSubject>
     public Guid? InitialId { get; }
 
     public Points ExamPoints { get; }
-
-    public ExamSubject(
-        string name,
-        Guid id,
-        Guid? initialId,
-        IReadOnlyCollection<ILaboratoryWork> laboratoryWorks,
-        IReadOnlyCollection<ILectureMaterial> lectureMaterials,
-        Points examPoints,
-        User author)
-    {
-        Name = name;
-        LaboratoryWorks = laboratoryWorks;
-        LectureMaterials = lectureMaterials;
-        Author = author;
-        Id = id;
-        InitialId = initialId;
-        ExamPoints = examPoints;
-    }
 
     public SetNameResult SetName(string name, User user)
     {

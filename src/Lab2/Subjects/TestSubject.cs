@@ -8,13 +8,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects;
 
 public class TestSubject : ISubject<TestSubject>
 {
-    public string Name { get; private set; }
-
-    public IReadOnlyCollection<ILaboratoryWork> LaboratoryWorks { get; }
-
-    public IReadOnlyCollection<ILectureMaterial> LectureMaterials { get; }
-
-    public Points MinSuccessPoints { get; }
+    public static Points MaxSubjectPoints()
+        => new Points(100);
 
     public TestSubject(
         string name,
@@ -25,6 +20,9 @@ public class TestSubject : ISubject<TestSubject>
         Points minSuccessPoints,
         User author)
     {
+        if (laboratoryWorks.Sum(laboratoryWork => laboratoryWork.PointsAmount.Value) != MaxSubjectPoints().Value)
+            throw new ArgumentException("Sum of points of laboratory works is not equal to exam points.");
+
         Name = name;
         LaboratoryWorks = laboratoryWorks;
         LectureMaterials = lectureMaterials;
@@ -33,6 +31,14 @@ public class TestSubject : ISubject<TestSubject>
         MinSuccessPoints = minSuccessPoints;
         InitialId = initialId;
     }
+
+    public string Name { get; private set; }
+
+    public IReadOnlyCollection<ILaboratoryWork> LaboratoryWorks { get; }
+
+    public IReadOnlyCollection<ILectureMaterial> LectureMaterials { get; }
+
+    public Points MinSuccessPoints { get; }
 
     public User Author { get; }
 
