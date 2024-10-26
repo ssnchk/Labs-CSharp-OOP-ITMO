@@ -1,4 +1,5 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.IdGenerators;
+using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
 using Itmo.ObjectOrientedProgramming.Lab2.ValueObjects;
 
@@ -6,12 +7,12 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
 
 public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
 {
-    public LaboratoryWork(
+    private LaboratoryWork(
         User currentUser,
         User author,
         string name,
-        Guid id,
-        Guid? initialId,
+        long id,
+        long? initialId,
         Points pointsAmount,
         string description,
         IReadOnlyCollection<string> criterias)
@@ -26,15 +27,15 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         ParentId = initialId;
     }
 
-    public Guid Id { get; }
+    public long Id { get; }
 
-    public Guid? ParentId { get; }
+    public long? ParentId { get; }
 
-    public IReadOnlyCollection<string> Criterias { get; private set; }
+    public IReadOnlyCollection<string> Criterias { get; }
 
-    public string Name { get; private set; }
+    public string Name { get; }
 
-    public string Description { get; private set; }
+    public string Description { get; }
 
     public Points PointsAmount { get; }
 
@@ -47,49 +48,121 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         CurrentUser = user;
     }
 
-    public SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias)
+    public UpdateLaboratoryWorkResult Update(
+        string name,
+        string description,
+        Points pointsAmount,
+        IReadOnlyCollection<string> criterias)
     {
-        if (!CurrentUser.Equals(Author))
-            return new SetCriteriasResult.Failure("User is not author");
+        if (CurrentUser != Author)
+            return new UpdateLaboratoryWorkResult.Failure("Only author can update");
 
-        Criterias = criterias;
-
-        return new SetCriteriasResult.Success();
+        return new UpdateLaboratoryWorkResult.Success(new LaboratoryWork(
+            CurrentUser,
+            CurrentUser,
+            name,
+            Id,
+            Id,
+            pointsAmount,
+            description,
+            criterias));
     }
 
-    public SetNameResult SetName(string name)
+    public LaboratoryWork Clone()
     {
-        if (!CurrentUser.Equals(Author))
-            return new SetNameResult.Failure("User is not author");
-
-        Name = name;
-
-        return new SetNameResult.Success();
-    }
-
-    public SetDescriptionResult SetDescription(string description)
-    {
-        if (!CurrentUser.Equals(Author))
-            return new SetDescriptionResult.Failure("User is not author");
-
-        Description = description;
-
-        return new SetDescriptionResult.Success();
-    }
-
-    public LaboratoryWork Clone(Guid newId)
-    {
-        if (newId.Equals(Id))
-            throw new ArgumentException("newId cannot be equal to Id");
-
         return new LaboratoryWork(
             CurrentUser,
             CurrentUser,
             Name,
-            newId,
+            IdGenerator.GenerateNewId(),
             Id,
             PointsAmount,
             Description,
             Criterias);
+    }
+
+    public LaboratoryWorkBuilder Direct(LaboratoryWorkBuilder builder)
+    {
+        builder.WithName(Name);
+        builder.WithParentId(Id);
+        builder.WithDescription(Description);
+        builder.WithPointsAmount(PointsAmount);
+        builder.WithAuthor(CurrentUser);
+
+        foreach (string criteria in Criterias)
+        {
+            builder.AddCriteria(criteria);
+        }
+
+        return builder;
+    }
+
+    public class LaboratoryWorkBuilder
+    {
+        private readonly List<string> _criteria = [];
+
+        private string? _name;
+        private string? _description;
+
+        private long? _parentId;
+
+        private Points? _pointsAmount;
+        private User? _author;
+        private User? _currentUser;
+
+        public LaboratoryWorkBuilder WithParentId(long? parentId)
+        {
+            _parentId = parentId;
+            return this;
+        }
+
+        public LaboratoryWorkBuilder WithCurrentUser(User currentUser)
+        {
+            _currentUser = currentUser;
+            return this;
+        }
+
+        public LaboratoryWorkBuilder WithName(string name)
+        {
+            _name = name;
+            return this;
+        }
+
+        public LaboratoryWorkBuilder WithDescription(string description)
+        {
+            _description = description;
+            return this;
+        }
+
+        public LaboratoryWorkBuilder WithPointsAmount(Points pointsAmount)
+        {
+            _pointsAmount = pointsAmount;
+            return this;
+        }
+
+        public LaboratoryWorkBuilder AddCriteria(string criteria)
+        {
+            _criteria.Add(criteria);
+            return this;
+        }
+
+        public LaboratoryWorkBuilder WithAuthor(User author)
+        {
+            _author = author;
+            return this;
+        }
+
+        public ILaboratoryWork Build()
+        {
+            return new LaboratoryWork(
+                _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
+                _author ?? throw new ArgumentNullException(nameof(_author)),
+                _name ?? throw new ArgumentNullException(nameof(_name)),
+                IdGenerator.GenerateNewId(),
+                _parentId,
+                _pointsAmount ?? throw new ArgumentNullException(nameof(_pointsAmount)),
+                _description ?? throw new ArgumentNullException(nameof(_description)),
+                _criteria);
+        }
     }
 }

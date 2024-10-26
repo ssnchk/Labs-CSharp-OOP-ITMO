@@ -1,26 +1,24 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
 public class InMemoryRepository<T> : IRepository<T>
+    where T : IIdentifiable
 {
-    private readonly Dictionary<Guid, T> _items = [];
+    private readonly Dictionary<long, T> _items = [];
 
-    public GetItemResult<T> GetItem(Guid id)
+    public GetItemResult<T> GetItem(long id)
     {
         return _items.ContainsKey(id)
             ? new GetItemResult<T>.Success(_items[id])
             : new GetItemResult<T>.Failure("Item not found");
     }
 
-    public AddItemResult AddItem(Guid id, T item)
+    public AddItemResult AddItem(T item)
     {
-        if (!_items.ContainsKey(id))
-            return new AddItemResult.Failure("Item already exists");
-
-        _items[id] = item;
+        _items[item.Id] = item;
         return new AddItemResult.Success();
     }
 
-    public RemoveItemResult RemoveItem(Guid id)
+    public RemoveItemResult RemoveItem(long id)
     {
         if (!_items.ContainsKey(id))
             return new RemoveItemResult.Failure("Item not found");

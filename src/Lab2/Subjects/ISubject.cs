@@ -17,17 +17,17 @@ public interface ISubject
 
     public User CurrentUser { get; }
 
-    public Guid Id { get; }
+    public long Id { get; }
 
-    public Guid? ParentId { get; }
+    public long? ParentId { get; }
 
     public void SetCurrentUser(User user);
 
-    public SetNameResult SetName(string name);
+    public UpdateSubjectResult Update(string name);
 }
 
 public interface ISubject<out T> : ISubject
     where T : ISubject<T>
 {
-    public T Clone(Guid newId);
+    public T Clone();
 }

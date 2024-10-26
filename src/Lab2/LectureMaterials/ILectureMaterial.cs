@@ -3,7 +3,7 @@ using Itmo.ObjectOrientedProgramming.Lab2.Users;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials;
 
-public interface ILectureMaterial
+public interface ILectureMaterial : ILectureMaterialBuilderDirector
 {
     public string Name { get; }
 
@@ -11,9 +11,9 @@ public interface ILectureMaterial
 
     public string Description { get; }
 
-    public Guid Id { get; }
+    public long Id { get; }
 
-    public Guid? ParentId { get; }
+    public long? ParentId { get; }
 
     public User Author { get; }
 
@@ -21,15 +21,11 @@ public interface ILectureMaterial
 
     void SetCurrentUser(User user);
 
-    SetNameResult SetName(string name);
-
-    SetDescriptionResult SetDescription(string description);
-
-    SetContextResult SetContext(string context);
+    UpdateLectureMaterealResult Update(string name, string description, string content);
 }
 
 public interface ILectureMaterial<out T> : ILectureMaterial
     where T : ILectureMaterial<T>
 {
-    T Clone(Guid newId);
+    T Clone();
 }

@@ -1,14 +1,8 @@
-﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Users;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.IdGenerators;
 
-public record User
+namespace Itmo.ObjectOrientedProgramming.Lab2.Users;
+
+public record User(string Name)
 {
-    public Guid Id { get; }
-
-    public string Name { get; }
-
-    public User(string name, Guid id)
-    {
-        Name = name;
-        Id = id;
-    }
+    public long Id { get; } = IdGenerator.GenerateNewId();
 }

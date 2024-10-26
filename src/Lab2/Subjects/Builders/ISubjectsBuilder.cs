@@ -10,8 +10,6 @@ public interface ISubjectsBuilder
 
     public ISubjectsBuilder WithName(string name);
 
-    public ISubjectsBuilder WithId(Guid id);
-
     public ISubjectsBuilder WithAuthor(User author);
 
     public ISubjectsBuilder AddLaboratoryWork(ILaboratoryWork laboratoryWork);

@@ -25,6 +25,6 @@ public class SemesterBuilder
     {
         return new Semester(
             _number ?? throw new ArgumentNullException(nameof(_number)),
-            _subjects ?? throw new ArgumentNullException(nameof(_subjects)));
+            _subjects);
     }
 }

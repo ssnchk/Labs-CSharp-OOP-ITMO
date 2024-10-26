@@ -1,10 +1,10 @@
 ﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
-public interface IRepository<T>
+public interface IRepository<T> where T : IIdentifiable
 {
-    public GetItemResult<T> GetItem(Guid id);
+    public GetItemResult<T> GetItem(long id);
 
-    public AddItemResult AddItem(Guid id, T item);
+    public AddItemResult AddItem(T item);
 
-    public RemoveItemResult RemoveItem(Guid id);
+    public RemoveItemResult RemoveItem(long id);
 }

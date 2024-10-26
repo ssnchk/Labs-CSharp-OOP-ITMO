@@ -1,6 +1,8 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.IdGenerators;
+using Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
 using Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials;
 using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
+using Itmo.ObjectOrientedProgramming.Lab2.Subjects.Builders;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
 using Itmo.ObjectOrientedProgramming.Lab2.ValueObjects;
 
@@ -11,11 +13,11 @@ public class TestSubject : ISubject<TestSubject>
     public static Points MaxSubjectPoints()
         => new Points(100);
 
-    public TestSubject(
+    private TestSubject(
         User currentUser,
         string name,
-        Guid id,
-        Guid? parentId,
+        long id,
+        long? parentId,
         IReadOnlyCollection<ILaboratoryWork> laboratoryWorks,
         IReadOnlyCollection<ILectureMaterial> lectureMaterials,
         Points minSuccessPoints,
@@ -34,7 +36,7 @@ public class TestSubject : ISubject<TestSubject>
         ParentId = parentId;
     }
 
-    public string Name { get; private set; }
+    public string Name { get; }
 
     public IReadOnlyCollection<ILaboratoryWork> LaboratoryWorks { get; }
 
@@ -46,30 +48,97 @@ public class TestSubject : ISubject<TestSubject>
 
     public User CurrentUser { get; private set; }
 
-    public Guid Id { get; }
+    public long Id { get; }
 
-    public Guid? ParentId { get; }
+    public long? ParentId { get; }
 
     public void SetCurrentUser(User user)
     {
         CurrentUser = user;
     }
 
-    public SetNameResult SetName(string name)
+    public UpdateSubjectResult Update(string name)
     {
-        if (!CurrentUser.Equals(Author))
-            return new SetNameResult.Failure("User is not author");
+        if (CurrentUser != Author)
+            return new UpdateSubjectResult.Failure("User is not author");
 
-        Name = name;
+        var updatedTestSubject = new TestSubject(
+            Author,
+            name,
+            Id,
+            ParentId,
+            LaboratoryWorks,
+            LectureMaterials,
+            MinSuccessPoints,
+            Author);
 
-        return new SetNameResult.Success();
+        return new UpdateSubjectResult.Success(updatedTestSubject);
     }
 
-    public TestSubject Clone(Guid newId)
+    public TestSubject Clone()
     {
-        if (newId.Equals(Id))
-            throw new ArgumentException("newId cannot be equal to Id");
+        return new TestSubject(
+            CurrentUser,
+            Name,
+            IdGenerator.GenerateNewId(),
+            Id,
+            LaboratoryWorks,
+            LectureMaterials,
+            MinSuccessPoints,
+            CurrentUser);
+    }
 
-        return new TestSubject(CurrentUser, Name, newId, Id, LaboratoryWorks, LectureMaterials, MinSuccessPoints, CurrentUser);
+    public class TestSubjectBuilder(Points minSuccessPoints) : ISubjectsBuilder
+    {
+        private readonly long? _parentId = null;
+        private readonly List<ILaboratoryWork> _laboratoryWorks = [];
+        private readonly List<ILectureMaterial> _lectureMaterials = [];
+
+        private string? _name;
+        private User? _author;
+        private User? _currentUser;
+
+        public ISubjectsBuilder WithCurrentUser(User user)
+        {
+            _currentUser = user;
+            return this;
+        }
+
+        public ISubjectsBuilder WithName(string name)
+        {
+            _name = name;
+            return this;
+        }
+
+        public ISubjectsBuilder WithAuthor(User author)
+        {
+            _author = author;
+            return this;
+        }
+
+        public ISubjectsBuilder AddLaboratoryWork(ILaboratoryWork laboratoryWork)
+        {
+            _laboratoryWorks.Add(laboratoryWork);
+            return this;
+        }
+
+        public ISubjectsBuilder AddLectureMaterial(ILectureMaterial lectureMaterial)
+        {
+            _lectureMaterials.Add(lectureMaterial);
+            return this;
+        }
+
+        public ISubject Build()
+        {
+            return new TestSubject(
+                _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
+                _name ?? throw new ArgumentNullException(nameof(_name)),
+                IdGenerator.GenerateNewId(),
+                _parentId,
+                _laboratoryWorks,
+                _lectureMaterials,
+                minSuccessPoints ?? throw new ArgumentNullException(nameof(minSuccessPoints)),
+                _author ?? throw new ArgumentNullException(nameof(_author)));
+        }
     }
 }

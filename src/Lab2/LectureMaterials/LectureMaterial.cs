@@ -1,16 +1,17 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.IdGenerators;
+using Itmo.ObjectOrientedProgramming.Lab2.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab2.Users;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials;
 
 public class LectureMaterial : ILectureMaterial<LectureMaterial>
 {
-    public LectureMaterial(
+    private LectureMaterial(
         User currentUser,
         User author,
         string name,
-        Guid id,
-        Guid? initialId,
+        long id,
+        long? initialId,
         string description,
         string content)
     {
@@ -23,15 +24,15 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         Content = content;
     }
 
-    public string Name { get; private set; }
+    public string Name { get; }
 
-    public string Content { get; private set; }
+    public string Content { get; }
 
-    public string Description { get; private set; }
+    public string Description { get; }
 
-    public Guid Id { get; }
+    public long Id { get; }
 
-    public Guid? ParentId { get; }
+    public long? ParentId { get; }
 
     public User Author { get; }
 
@@ -42,41 +43,95 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         CurrentUser = user;
     }
 
-    public SetNameResult SetName(string name)
+    public UpdateLectureMaterealResult Update(string name, string description, string content)
     {
-        if (!CurrentUser.Equals(Author))
-            return new SetNameResult.Failure("User is not author");
+        if (CurrentUser != Author)
+            return new UpdateLectureMaterealResult.Failure("Only author can update");
 
-        Name = name;
-
-        return new SetNameResult.Success();
+        return new UpdateLectureMaterealResult.Success(new LectureMaterial(
+            CurrentUser,
+            Author,
+            name,
+            Id,
+            ParentId,
+            description,
+            content));
     }
 
-    public SetDescriptionResult SetDescription(string description)
+    public LectureMaterial Clone()
     {
-        if (!CurrentUser.Equals(Author))
-            return new SetDescriptionResult.Failure("User is not author");
-
-        Description = description;
-
-        return new SetDescriptionResult.Success();
+        return new LectureMaterial(CurrentUser, CurrentUser, Name, IdGenerator.GenerateNewId(), Id, Description, Content);
     }
 
-    public SetContextResult SetContext(string context)
+    public LectureMaterialBuilder Direct(LectureMaterialBuilder builder)
     {
-        if (!CurrentUser.Equals(Author))
-            return new SetContextResult.Failure("User is not author");
+        builder
+            .WithName(Name)
+            .WithParentId(Id)
+            .WithDescription(Description)
+            .WithContent(Content)
+            .WithAuthor(CurrentUser);
 
-        Content = context;
-
-        return new SetContextResult.Success();
+        return builder;
     }
 
-    public LectureMaterial Clone(Guid newId)
+    public class LectureMaterialBuilder
     {
-        if (newId.Equals(Id))
-            throw new ArgumentException("newId cannot be equal to Id");
+        private string? _content;
+        private string? _name;
+        private string? _description;
 
-        return new LectureMaterial(CurrentUser, CurrentUser, Name, newId, Id, Description, Content);
+        private long? _parentId;
+
+        private User? _author;
+        private User? _currentUser;
+
+        public LectureMaterialBuilder WithParentId(long? id)
+        {
+            _parentId = id;
+            return this;
+        }
+
+        public LectureMaterialBuilder WithCurrentUser(User currentUser)
+        {
+            _currentUser = currentUser;
+            return this;
+        }
+
+        public LectureMaterialBuilder WithAuthor(User author)
+        {
+            _author = author;
+            return this;
+        }
+
+        public LectureMaterialBuilder WithName(string name)
+        {
+            _name = name;
+            return this;
+        }
+
+        public LectureMaterialBuilder WithDescription(string description)
+        {
+            _description = description;
+            return this;
+        }
+
+        public LectureMaterialBuilder WithContent(string content)
+        {
+            _content = content;
+            return this;
+        }
+
+        public ILectureMaterial Build()
+        {
+            return new LectureMaterial(
+                _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
+                _author ?? throw new ArgumentNullException(nameof(_author)),
+                _name ?? throw new ArgumentNullException(nameof(_name)),
+                IdGenerator.GenerateNewId(),
+                _parentId,
+                _description ?? throw new ArgumentNullException(nameof(_description)),
+                _content ?? throw new ArgumentNullException(nameof(_content)));
+        }
     }
 }
