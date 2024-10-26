@@ -14,6 +14,13 @@ public class LaboratoryWorkBuilder
     private Guid? _id;
     private Points? _pointsAmount;
     private User? _author;
+    private User? _currentUser;
+
+    public LaboratoryWorkBuilder WithCurrentUser(User currentUser)
+    {
+        _currentUser = currentUser;
+        return this;
+    }
 
     public LaboratoryWorkBuilder WithName(string name)
     {
@@ -54,6 +61,7 @@ public class LaboratoryWorkBuilder
     public ILaboratoryWork Build()
     {
         return new LaboratoryWork(
+            _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
             _author ?? throw new ArgumentNullException(nameof(_author)),
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),

@@ -12,6 +12,13 @@ public class LectureMaterialBuilder
 
     private Guid? _id;
     private User? _author;
+    private User? _currentUser;
+
+    public LectureMaterialBuilder WithCurrentUser(User currentUser)
+    {
+        _currentUser = currentUser;
+        return this;
+    }
 
     public LectureMaterialBuilder WithAuthor(User author)
     {
@@ -46,6 +53,7 @@ public class LectureMaterialBuilder
     public ILectureMaterial Build()
     {
         return new LectureMaterial(
+            _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
             _author ?? throw new ArgumentNullException(nameof(_author)),
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),

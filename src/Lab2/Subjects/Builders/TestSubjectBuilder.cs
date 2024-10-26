@@ -14,11 +14,18 @@ public class TestSubjectBuilder : ISubjectsBuilder
     private Points? _minSuccessPoints;
     private string? _name;
     private User? _author;
+    private User? _currentUser;
     private Guid? _id;
 
     public ISubjectsBuilder WithMinSuccessPoints(Points? minSuccessPoints)
     {
         _minSuccessPoints = minSuccessPoints;
+        return this;
+    }
+
+    public ISubjectsBuilder WithCurrentUser(User user)
+    {
+        _currentUser = user;
         return this;
     }
 
@@ -55,6 +62,7 @@ public class TestSubjectBuilder : ISubjectsBuilder
     public ISubject Build()
     {
         return new TestSubject(
+            _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),
             _parentId,

@@ -20,15 +20,19 @@ public interface ILaboratoryWork
 
     public User Author { get; }
 
-    SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias, User user);
+    public User CurrentUser { get; }
 
-    SetNameResult SetName(string name, User user);
+    void SetCurrentUser(User user);
 
-    SetDescriptionResult SetDescription(string description, User user);
+    SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias);
+
+    SetNameResult SetName(string name);
+
+    SetDescriptionResult SetDescription(string description);
 }
 
 public interface ILaboratoryWork<out T> : ILaboratoryWork
     where T : ILaboratoryWork<T>
 {
-    T Clone(Guid newId, User newAuthor);
+    T Clone(Guid newId);
 }

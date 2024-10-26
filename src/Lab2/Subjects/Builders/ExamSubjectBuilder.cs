@@ -14,11 +14,18 @@ public class ExamSubjectBuilder : ISubjectsBuilder
     private Points? _examPoints;
     private string? _name;
     private User? _author;
+    private User? _currentUser;
     private Guid? _id;
 
     public ISubjectsBuilder WithPoints(Points? examPoints)
     {
         _examPoints = examPoints;
+        return this;
+    }
+
+    public ISubjectsBuilder WithCurrentUser(User user)
+    {
+        _currentUser = user;
         return this;
     }
 
@@ -55,6 +62,7 @@ public class ExamSubjectBuilder : ISubjectsBuilder
     public ISubject Build()
     {
         return new ExamSubject(
+            _currentUser ?? throw new ArgumentNullException(nameof(_currentUser)),
             _name ?? throw new ArgumentNullException(nameof(_name)),
             _id ?? throw new ArgumentNullException(nameof(_id)),
             _parentId,

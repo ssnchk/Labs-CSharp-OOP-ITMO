@@ -6,6 +6,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LectureMaterials;
 public class LectureMaterial : ILectureMaterial<LectureMaterial>
 {
     public LectureMaterial(
+        User currentUser,
         User author,
         string name,
         Guid id,
@@ -13,12 +14,18 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         string description,
         string content)
     {
+        CurrentUser = currentUser;
         Author = author;
         Name = name;
         Id = id;
         ParentId = initialId;
         Description = description;
         Content = content;
+    }
+
+    public LectureMaterial Clone(Guid newId, User newAuthor)
+    {
+        throw new NotImplementedException();
     }
 
     public string Name { get; private set; }
@@ -33,9 +40,16 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
 
     public User Author { get; }
 
-    public SetNameResult SetName(string name, User user)
+    public User CurrentUser { get; private set; }
+
+    public void SetCurrentUser(User user)
     {
-        if (!user.Equals(Author))
+        CurrentUser = user;
+    }
+
+    public SetNameResult SetName(string name)
+    {
+        if (!CurrentUser.Equals(Author))
             return new SetNameResult.Failure("User is not author");
 
         Name = name;
@@ -43,9 +57,9 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         return new SetNameResult.Success();
     }
 
-    public SetDescriptionResult SetDescription(string description, User user)
+    public SetDescriptionResult SetDescription(string description)
     {
-        if (!user.Equals(Author))
+        if (!CurrentUser.Equals(Author))
             return new SetDescriptionResult.Failure("User is not author");
 
         Description = description;
@@ -53,9 +67,9 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         return new SetDescriptionResult.Success();
     }
 
-    public SetContextResult SetContext(string context, User user)
+    public SetContextResult SetContext(string context)
     {
-        if (!user.Equals(Author))
+        if (!CurrentUser.Equals(Author))
             return new SetContextResult.Failure("User is not author");
 
         Content = context;
@@ -63,11 +77,11 @@ public class LectureMaterial : ILectureMaterial<LectureMaterial>
         return new SetContextResult.Success();
     }
 
-    public LectureMaterial Clone(Guid newId, User newAuthor)
+    public LectureMaterial Clone(Guid newId)
     {
         if (newId.Equals(Id))
             throw new ArgumentException("newId cannot be equal to Id");
 
-        return new LectureMaterial(Author, Name, newId, Id, Description, Content);
+        return new LectureMaterial(CurrentUser, CurrentUser, Name, newId, Id, Description, Content);
     }
 }

@@ -15,15 +15,19 @@ public interface ISubject
 
     public User Author { get; }
 
+    public User CurrentUser { get; }
+
     public Guid Id { get; }
 
     public Guid? ParentId { get; }
 
-    public SetNameResult SetName(string name, User user);
+    public void SetCurrentUser(User user);
+
+    public SetNameResult SetName(string name);
 }
 
 public interface ISubject<out T> : ISubject
     where T : ISubject<T>
 {
-    public T Clone(Guid newId, User newAuthor);
+    public T Clone(Guid newId);
 }

@@ -17,15 +17,19 @@ public interface ILectureMaterial
 
     public User Author { get; }
 
-    SetNameResult SetName(string name, User user);
+    public User CurrentUser { get; }
 
-    SetDescriptionResult SetDescription(string description, User user);
+    void SetCurrentUser(User user);
 
-    SetContextResult SetContext(string context, User user);
+    SetNameResult SetName(string name);
+
+    SetDescriptionResult SetDescription(string description);
+
+    SetContextResult SetContext(string context);
 }
 
 public interface ILectureMaterial<out T> : ILectureMaterial
     where T : ILectureMaterial<T>
 {
-    T Clone(Guid newId, User newAuthor);
+    T Clone(Guid newId);
 }

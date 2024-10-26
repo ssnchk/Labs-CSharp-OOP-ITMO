@@ -26,21 +26,23 @@ public class EducationalProgramTests
         laboratoryWorkBuilder.WithId(Guid.NewGuid());
         laboratoryWorkBuilder.WithPointsAmount(new Points(10));
         laboratoryWorkBuilder.WithDescription("some description");
+        laboratoryWorkBuilder.WithCurrentUser(author);
 
         ILaboratoryWork laboratoryWork = laboratoryWorkBuilder.Build();
 
         // Act
-        SetNameResult setNameResultWithWrongAuthor = laboratoryWork.SetName("lab2", notAuthor);
-        SetNameResult setNameResulWithRightAuthor = laboratoryWork.SetName("lab2", author);
-
-        SetCriteriasResult setCriteriasResultWithWrongAuthor =
-            laboratoryWork.SetCriterias(new List<string>(), notAuthor);
-        SetCriteriasResult setCriteriasResultWithRightAuthor = laboratoryWork.SetCriterias(new List<string>(), author);
-
-        SetDescriptionResult setDescriptionResultWithWrongAuthor =
-            laboratoryWork.SetDescription("some description", notAuthor);
+        SetNameResult setNameResulWithRightAuthor = laboratoryWork.SetName("lab2");
+        SetCriteriasResult setCriteriasResultWithRightAuthor = laboratoryWork.SetCriterias(new List<string>());
         SetDescriptionResult setDescriptionResultWithRightAuthor =
-            laboratoryWork.SetDescription("some description", author);
+            laboratoryWork.SetDescription("some description");
+
+        laboratoryWork.SetCurrentUser(notAuthor);
+
+        SetNameResult setNameResultWithWrongAuthor = laboratoryWork.SetName("lab2");
+        SetCriteriasResult setCriteriasResultWithWrongAuthor =
+            laboratoryWork.SetCriterias(new List<string>());
+        SetDescriptionResult setDescriptionResultWithWrongAuthor =
+            laboratoryWork.SetDescription("some description");
 
         // Assert
         Assert.IsType<SetNameResult.Failure>(setNameResultWithWrongAuthor);
@@ -66,20 +68,22 @@ public class EducationalProgramTests
         lectureMaterialBuilder.WithId(Guid.NewGuid());
         lectureMaterialBuilder.WithDescription("some description");
         lectureMaterialBuilder.WithContext("some context");
+        lectureMaterialBuilder.WithCurrentUser(author);
 
         ILectureMaterial lectureMaterial = lectureMaterialBuilder.Build();
 
         // Act
-        SetNameResult setNameResultWithWrongAuthor = lectureMaterial.SetName("lab2", notAuthor);
-        SetNameResult setNameResulWithRightAuthor = lectureMaterial.SetName("lab2", author);
-
-        SetDescriptionResult setDescriptionResultWithWrongAuthor =
-            lectureMaterial.SetDescription("some description", notAuthor);
+        SetNameResult setNameResulWithRightAuthor = lectureMaterial.SetName("lab2");
         SetDescriptionResult setDescriptionResultWithRightAuthor =
-            lectureMaterial.SetDescription("some description", author);
+            lectureMaterial.SetDescription("some description");
+        SetContextResult setContextResultWithRightAuthor = lectureMaterial.SetContext("some context");
 
-        SetContextResult setContextResultWithWrongAuthor = lectureMaterial.SetContext("some context", notAuthor);
-        SetContextResult setContextResultWithRightAuthor = lectureMaterial.SetContext("some context", author);
+        lectureMaterial.SetCurrentUser(notAuthor);
+
+        SetNameResult setNameResultWithWrongAuthor = lectureMaterial.SetName("lab2");
+        SetDescriptionResult setDescriptionResultWithWrongAuthor =
+            lectureMaterial.SetDescription("some description");
+        SetContextResult setContextResultWithWrongAuthor = lectureMaterial.SetContext("some context");
 
         // Assert
         Assert.IsType<SetNameResult.Failure>(setNameResultWithWrongAuthor);
@@ -105,6 +109,7 @@ public class EducationalProgramTests
         laboratoryWorkBuilder.WithId(Guid.NewGuid());
         laboratoryWorkBuilder.WithPointsAmount(new Points(100));
         laboratoryWorkBuilder.WithDescription("some description");
+        laboratoryWorkBuilder.WithCurrentUser(author);
 
         ILaboratoryWork laboratoryWork = laboratoryWorkBuilder.Build();
 
@@ -114,6 +119,7 @@ public class EducationalProgramTests
         examSubjectBuilder.WithId(Guid.NewGuid());
         examSubjectBuilder.WithPoints(new Points(10));
         examSubjectBuilder.AddLaboratoryWork(laboratoryWork);
+        examSubjectBuilder.WithCurrentUser(author);
 
         ISubject examSubject = examSubjectBuilder.Build();
 
@@ -123,15 +129,19 @@ public class EducationalProgramTests
         testSubjectBuilder.WithId(Guid.NewGuid());
         testSubjectBuilder.WithMinSuccessPoints(new Points(10));
         testSubjectBuilder.AddLaboratoryWork(laboratoryWork);
+        testSubjectBuilder.WithCurrentUser(author);
 
         ISubject testSubject = testSubjectBuilder.Build();
 
         // Act
-        SetNameResult setNameResultForExamSubjectWithWrongAuthor = examSubject.SetName("lab2", notAuthor);
-        SetNameResult setNameResulForExamSubjectWithRightAuthor = examSubject.SetName("lab2", author);
+        SetNameResult setNameResulForExamSubjectWithRightAuthor = examSubject.SetName("lab2");
+        SetNameResult setNameResulForTestSubjectWithRightAuthor = testSubject.SetName("lab2");
 
-        SetNameResult setNameResultForTestSubjectWithWrongAuthor = testSubject.SetName("lab2", notAuthor);
-        SetNameResult setNameResulForTestSubjectWithRightAuthor = testSubject.SetName("lab2", author);
+        examSubject.SetCurrentUser(notAuthor);
+        testSubject.SetCurrentUser(notAuthor);
+
+        SetNameResult setNameResultForExamSubjectWithWrongAuthor = examSubject.SetName("lab2");
+        SetNameResult setNameResultForTestSubjectWithWrongAuthor = testSubject.SetName("lab2");
 
         // Assert
         Assert.IsType<SetNameResult.Failure>(setNameResultForExamSubjectWithWrongAuthor);
@@ -154,18 +164,19 @@ public class EducationalProgramTests
         laboratoryWorkBuilder.WithId(originalId);
         laboratoryWorkBuilder.WithPointsAmount(new Points(10));
         laboratoryWorkBuilder.WithDescription("some description");
+        laboratoryWorkBuilder.WithCurrentUser(author);
 
         var laboratoryWork = (ILaboratoryWork<LaboratoryWork>)laboratoryWorkBuilder.Build();
 
         // Act
         ILaboratoryWork clonedLaboratoryWorkWithNewId =
-            laboratoryWork.Clone(Guid.NewGuid(), author);
+            laboratoryWork.Clone(Guid.NewGuid());
 
         // Assert
         Assert.NotEqual(laboratoryWork.Id, clonedLaboratoryWorkWithNewId.Id);
         Assert.Equal(laboratoryWork.Id, clonedLaboratoryWorkWithNewId.ParentId);
 
-        Assert.Throws<ArgumentException>(() => laboratoryWork.Clone(originalId, author));
+        Assert.Throws<ArgumentException>(() => laboratoryWork.Clone(originalId));
     }
 
     [Fact]
@@ -181,18 +192,19 @@ public class EducationalProgramTests
         lectureMaterialBuilder.WithId(originalId);
         lectureMaterialBuilder.WithDescription("some description");
         lectureMaterialBuilder.WithContext("some context");
+        lectureMaterialBuilder.WithCurrentUser(author);
 
         var lectureMaterial = (ILectureMaterial<LectureMaterial>)lectureMaterialBuilder.Build();
 
         // Act
         ILectureMaterial clonedLectureMaterialWithNewId =
-            lectureMaterial.Clone(Guid.NewGuid(), author);
+            lectureMaterial.Clone(Guid.NewGuid());
 
         // Assert
         Assert.NotEqual(lectureMaterial.Id, clonedLectureMaterialWithNewId.Id);
         Assert.Equal(lectureMaterial.Id, clonedLectureMaterialWithNewId.ParentId);
 
-        Assert.Throws<ArgumentException>(() => lectureMaterial.Clone(originalId, author));
+        Assert.Throws<ArgumentException>(() => lectureMaterial.Clone(originalId));
     }
 
     [Fact]
@@ -208,6 +220,7 @@ public class EducationalProgramTests
         laboratoryWorkBuilder.WithId(Guid.NewGuid());
         laboratoryWorkBuilder.WithPointsAmount(new Points(100));
         laboratoryWorkBuilder.WithDescription("some description");
+        laboratoryWorkBuilder.WithCurrentUser(author);
 
         ILaboratoryWork laboratoryWork = laboratoryWorkBuilder.Build();
 
@@ -217,6 +230,7 @@ public class EducationalProgramTests
         examSubjectBuilder.WithId(originalId);
         examSubjectBuilder.WithPoints(new Points(10));
         examSubjectBuilder.AddLaboratoryWork(laboratoryWork);
+        examSubjectBuilder.WithCurrentUser(author);
 
         var examSubject = (ISubject<ExamSubject>)examSubjectBuilder.Build();
 
@@ -226,12 +240,13 @@ public class EducationalProgramTests
         testSubjectBuilder.WithId(originalId);
         testSubjectBuilder.WithMinSuccessPoints(new Points(10));
         testSubjectBuilder.AddLaboratoryWork(laboratoryWork);
+        testSubjectBuilder.WithCurrentUser(author);
 
         var testSubject = (ISubject<TestSubject>)testSubjectBuilder.Build();
 
         // Act
-        ISubject clonedSubjectWithNewId = examSubject.Clone(Guid.NewGuid(), author);
-        ISubject clonedSubjectWithNewId2 = testSubject.Clone(Guid.NewGuid(), author);
+        ISubject clonedSubjectWithNewId = examSubject.Clone(Guid.NewGuid());
+        ISubject clonedSubjectWithNewId2 = testSubject.Clone(Guid.NewGuid());
 
         // Assert
         Assert.NotEqual(examSubject.Id, clonedSubjectWithNewId.Id);
@@ -240,8 +255,8 @@ public class EducationalProgramTests
         Assert.NotEqual(testSubject.Id, clonedSubjectWithNewId2.Id);
         Assert.Equal(testSubject.Id, clonedSubjectWithNewId2.ParentId);
 
-        Assert.Throws<ArgumentException>(() => examSubject.Clone(originalId, author));
-        Assert.Throws<ArgumentException>(() => testSubject.Clone(originalId, author));
+        Assert.Throws<ArgumentException>(() => examSubject.Clone(originalId));
+        Assert.Throws<ArgumentException>(() => testSubject.Clone(originalId));
     }
 
     [Fact]
@@ -249,7 +264,6 @@ public class EducationalProgramTests
     {
         // Arrange
         var author = new User("ssnchk", Guid.NewGuid());
-        var notAuthor = new User("not_ssnchk", Guid.NewGuid());
 
         var laboratoryWorkBuilder = new LaboratoryWorkBuilder();
         laboratoryWorkBuilder.WithAuthor(author);
@@ -257,6 +271,7 @@ public class EducationalProgramTests
         laboratoryWorkBuilder.WithId(Guid.NewGuid());
         laboratoryWorkBuilder.WithPointsAmount(new Points(1));
         laboratoryWorkBuilder.WithDescription("some description");
+        laboratoryWorkBuilder.WithCurrentUser(author);
 
         ILaboratoryWork laboratoryWork = laboratoryWorkBuilder.Build();
 
@@ -266,6 +281,7 @@ public class EducationalProgramTests
         examSubjectBuilder.WithId(Guid.NewGuid());
         examSubjectBuilder.WithPoints(new Points(10));
         examSubjectBuilder.AddLaboratoryWork(laboratoryWork);
+        examSubjectBuilder.WithCurrentUser(author);
 
         var testSubjectBuilder = new TestSubjectBuilder();
         testSubjectBuilder.WithAuthor(author);
@@ -273,6 +289,7 @@ public class EducationalProgramTests
         testSubjectBuilder.WithId(Guid.NewGuid());
         testSubjectBuilder.WithMinSuccessPoints(new Points(10));
         testSubjectBuilder.AddLaboratoryWork(laboratoryWork);
+        testSubjectBuilder.WithCurrentUser(author);
 
         // Act
         Assert.Throws<ArgumentException>(() => examSubjectBuilder.Build());

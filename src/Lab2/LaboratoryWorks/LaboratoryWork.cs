@@ -7,6 +7,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.LaboratoryWorks;
 public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
 {
     public LaboratoryWork(
+        User currentUser,
         User author,
         string name,
         Guid id,
@@ -15,6 +16,7 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         string description,
         IReadOnlyCollection<string> criterias)
     {
+        CurrentUser = currentUser;
         Author = author;
         Name = name;
         Id = id;
@@ -38,9 +40,16 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
 
     public User Author { get; }
 
-    public SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias, User user)
+    public User CurrentUser { get; private set; }
+
+    public void SetCurrentUser(User user)
     {
-        if (!user.Equals(Author))
+        CurrentUser = user;
+    }
+
+    public SetCriteriasResult SetCriterias(IReadOnlyCollection<string> criterias)
+    {
+        if (!CurrentUser.Equals(Author))
             return new SetCriteriasResult.Failure("User is not author");
 
         Criterias = criterias;
@@ -48,9 +57,9 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         return new SetCriteriasResult.Success();
     }
 
-    public SetNameResult SetName(string name, User user)
+    public SetNameResult SetName(string name)
     {
-        if (!user.Equals(Author))
+        if (!CurrentUser.Equals(Author))
             return new SetNameResult.Failure("User is not author");
 
         Name = name;
@@ -58,9 +67,9 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         return new SetNameResult.Success();
     }
 
-    public SetDescriptionResult SetDescription(string description, User user)
+    public SetDescriptionResult SetDescription(string description)
     {
-        if (!user.Equals(Author))
+        if (!CurrentUser.Equals(Author))
             return new SetDescriptionResult.Failure("User is not author");
 
         Description = description;
@@ -68,13 +77,14 @@ public class LaboratoryWork : ILaboratoryWork<LaboratoryWork>
         return new SetDescriptionResult.Success();
     }
 
-    public LaboratoryWork Clone(Guid newId, User newAuthor)
+    public LaboratoryWork Clone(Guid newId)
     {
         if (newId.Equals(Id))
             throw new ArgumentException("newId cannot be equal to Id");
 
         return new LaboratoryWork(
-            newAuthor,
+            CurrentUser,
+            CurrentUser,
             Name,
             newId,
             Id,

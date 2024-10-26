@@ -6,6 +6,8 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Subjects.Builders;
 
 public interface ISubjectsBuilder
 {
+    public ISubjectsBuilder WithCurrentUser(User user);
+
     public ISubjectsBuilder WithName(string name);
 
     public ISubjectsBuilder WithId(Guid id);

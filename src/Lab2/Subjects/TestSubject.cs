@@ -12,6 +12,7 @@ public class TestSubject : ISubject<TestSubject>
         => new Points(100);
 
     public TestSubject(
+        User currentUser,
         string name,
         Guid id,
         Guid? parentId,
@@ -23,6 +24,7 @@ public class TestSubject : ISubject<TestSubject>
         if (laboratoryWorks.Sum(laboratoryWork => laboratoryWork.PointsAmount.Value) != MaxSubjectPoints().Value)
             throw new ArgumentException("Sum of points of laboratory works is not equal to exam points.");
 
+        CurrentUser = currentUser;
         Name = name;
         LaboratoryWorks = laboratoryWorks;
         LectureMaterials = lectureMaterials;
@@ -42,13 +44,20 @@ public class TestSubject : ISubject<TestSubject>
 
     public User Author { get; }
 
+    public User CurrentUser { get; private set; }
+
     public Guid Id { get; }
 
     public Guid? ParentId { get; }
 
-    public SetNameResult SetName(string name, User user)
+    public void SetCurrentUser(User user)
     {
-        if (!user.Equals(Author))
+        CurrentUser = user;
+    }
+
+    public SetNameResult SetName(string name)
+    {
+        if (!CurrentUser.Equals(Author))
             return new SetNameResult.Failure("User is not author");
 
         Name = name;
@@ -56,11 +65,11 @@ public class TestSubject : ISubject<TestSubject>
         return new SetNameResult.Success();
     }
 
-    public TestSubject Clone(Guid newId, User newAuthor)
+    public TestSubject Clone(Guid newId)
     {
         if (newId.Equals(Id))
             throw new ArgumentException("newId cannot be equal to Id");
 
-        return new TestSubject(Name, newId, Id, LaboratoryWorks, LectureMaterials, MinSuccessPoints, newAuthor);
+        return new TestSubject(CurrentUser, Name, newId, Id, LaboratoryWorks, LectureMaterials, MinSuccessPoints, CurrentUser);
     }
 }
