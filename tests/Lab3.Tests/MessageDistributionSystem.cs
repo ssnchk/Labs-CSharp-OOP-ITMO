@@ -1,0 +1,189 @@
+﻿using Itmo.ObjectOrientedProgramming.Lab3.Addressee;
+using Itmo.ObjectOrientedProgramming.Lab3.Addressee.FilteredAddressees;
+using Itmo.ObjectOrientedProgramming.Lab3.Addressee.LoggingAddressees;
+using Itmo.ObjectOrientedProgramming.Lab3.Loggers;
+using Itmo.ObjectOrientedProgramming.Lab3.Messages;
+using Itmo.ObjectOrientedProgramming.Lab3.Messengers;
+using Itmo.ObjectOrientedProgramming.Lab3.ResultTypes;
+using Itmo.ObjectOrientedProgramming.Lab3.Severity;
+using Itmo.ObjectOrientedProgramming.Lab3.Topics;
+using Itmo.ObjectOrientedProgramming.Lab3.Users;
+using Moq;
+using Xunit;
+
+namespace Lab3.Tests;
+
+public class MessageDistributionSystem
+{
+    [Fact]
+    public void WhenUserReceiveMessageItShouldBeUnread()
+    {
+        // Arrange
+        var message1 = new Message("Title1", "Body1", SeverityLevel.Info);
+        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
+        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+
+        var user = new User();
+
+        var addressee = new AddresseeUser(user);
+
+        // Act
+        addressee.ReceiveMessage(message1);
+        addressee.ReceiveMessage(message2);
+        addressee.ReceiveMessage(message3);
+
+        // Assert
+        foreach (MessageWithReadStatus message in user.Messages)
+        {
+            Assert.False(message.IsRead);
+        }
+    }
+
+    [Fact]
+    public void WhenUserReceiveMessageAndMarkItAsReadItShouldBeRead()
+    {
+        // Arrange
+        var message1 = new Message("Title1", "Body1", SeverityLevel.Info);
+        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
+        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+
+        var user = new User();
+
+        var addressee = new AddresseeUser(user);
+
+        // Act
+        addressee.ReceiveMessage(message1);
+        addressee.ReceiveMessage(message2);
+        addressee.ReceiveMessage(message3);
+
+        foreach (MessageWithReadStatus message in user.Messages)
+        {
+            message.MarkAsRead();
+        }
+
+        // Assert
+        foreach (MessageWithReadStatus message in user.Messages)
+        {
+            Assert.True(message.IsRead);
+        }
+    }
+
+    [Fact]
+    public void WhenUserUserMarkReadMessageAsReadItShouldReturnFail()
+    {
+        // Arrange
+        var message1 = new Message("Title1", "Body1", SeverityLevel.Info);
+        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
+        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+
+        var user = new User();
+
+        var addressee = new AddresseeUser(user);
+
+        // Act
+        addressee.ReceiveMessage(message1);
+        addressee.ReceiveMessage(message2);
+        addressee.ReceiveMessage(message3);
+
+        foreach (MessageWithReadStatus message in user.Messages)
+        {
+            message.MarkAsRead();
+        }
+
+        // Assert
+        foreach (MessageWithReadStatus message in user.Messages)
+        {
+            Assert.IsType<MarkAsReadResult.Failure>(message.MarkAsRead());
+        }
+    }
+
+    [Fact]
+    public void FilteredAddresseeShouldNotReceiveUnfilteredMessage()
+    {
+        // Arrange
+        var message1 = new Message("Title1", "Body1", SeverityLevel.Debug);
+        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
+        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+
+        var mockUser = new Mock<IUser>();
+
+        var addressee = new AddresseeUser(mockUser.Object);
+        var filteredAddressee = new FilteredAddressee(addressee, SeverityLevel.Info);
+
+        // Act
+        filteredAddressee.ReceiveMessage(message1);
+        filteredAddressee.ReceiveMessage(message2);
+        filteredAddressee.ReceiveMessage(message3);
+
+        // Assert
+        Assert.Single(mockUser.Invocations);
+    }
+
+    [Fact]
+    public void LoggedAddresseeShouldLogReceivedMessage()
+    {
+        // Arrange
+        var message1 = new Message("Title1", "Body1", SeverityLevel.Debug);
+        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
+        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+
+        var mockLogger = new Mock<ILogger>();
+
+        var user = new User();
+        var addressee = new AddresseeUser(user);
+        var loggingAddressee = new LoggingAddressee(addressee, mockLogger.Object);
+
+        // Act
+        loggingAddressee.ReceiveMessage(message1);
+        loggingAddressee.ReceiveMessage(message2);
+        loggingAddressee.ReceiveMessage(message3);
+
+        // Assert
+        Assert.Equal(3, mockLogger.Invocations.Count);
+    }
+
+    [Fact]
+    public void MessengerShouldReceiveMessage()
+    {
+        // Arrange
+        var message1 = new Message("Title1", "Body1", SeverityLevel.Debug);
+        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
+        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+
+        var mockMessenger = new Mock<IMessenger>();
+
+        var addressee = new AddresseeMessenger(mockMessenger.Object);
+
+        // Act
+        addressee.ReceiveMessage(message1);
+        addressee.ReceiveMessage(message2);
+        addressee.ReceiveMessage(message3);
+
+        // Assert
+        Assert.Equal(3, mockMessenger.Invocations.Count);
+    }
+
+    [Fact]
+    public void WhenTopicHasOneFilteredAddresseeAndOneUnfilteredAddresseeItShouldReceiveOneMessage()
+    {
+        // Arrange
+        var message = new Message("Title1", "Body1", SeverityLevel.Debug);
+
+        var mockUser = new Mock<IUser>();
+        mockUser.Setup(u => u.ReceiveMessage(It.IsAny<Message>()));
+
+        var addressee = new AddresseeUser(mockUser.Object);
+        var filteredAddressee = new FilteredAddressee(addressee, SeverityLevel.Info);
+
+        var topic = new Topic("Topic");
+
+        topic.AddAddressee(addressee);
+        topic.AddAddressee(filteredAddressee);
+
+        // Act
+        topic.SendMessage(message);
+
+        // Assert
+        Assert.Single(mockUser.Invocations);
+    }
+}
