@@ -8,6 +8,6 @@ public class Messenger : IMessenger
     {
         Console.WriteLine(message.Title);
         Console.WriteLine(message.Body);
-        Console.WriteLine("мессенджер");
+        Console.WriteLine("messenger");
     }
 }

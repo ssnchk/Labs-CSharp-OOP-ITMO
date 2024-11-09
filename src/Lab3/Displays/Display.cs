@@ -1,5 +1,6 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab3.Displays.DisplayDrivers;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
+using System.Drawing;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Displays;
 
@@ -16,5 +17,10 @@ public class Display : IDisplay
     {
         _displayDriver.Clear();
         _displayDriver.Display(message);
+    }
+
+    public void SetColor(Color color)
+    {
+        _displayDriver.SetColor(color);
     }
 }

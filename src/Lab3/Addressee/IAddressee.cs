@@ -1,7 +1,8 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab3.Models;
+﻿using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Addressee;
 
-public interface IAddressee : IRecipient
+public interface IAddressee
 {
+    void ReceiveMessage(Message message);
 }

@@ -1,5 +1,3 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab3.Severity;
+﻿namespace Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
-namespace Itmo.ObjectOrientedProgramming.Lab3.Messages;
-
-public record Message(string Title, string Body, SeverityLevel Severity);
+public record struct Message(string Title, string Body, int Severity);

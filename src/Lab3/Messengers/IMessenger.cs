@@ -1,5 +1,8 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab3.Models;
+﻿using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Messengers;
 
-public interface IMessenger : IRecipient { }
+public interface IMessenger
+{
+    void ReceiveMessage(Message message);
+}

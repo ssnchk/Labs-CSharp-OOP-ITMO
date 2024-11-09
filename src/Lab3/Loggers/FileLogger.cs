@@ -1,6 +1,4 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab3.Severity;
-
-namespace Itmo.ObjectOrientedProgramming.Lab3.Loggers;
+﻿namespace Itmo.ObjectOrientedProgramming.Lab3.Loggers;
 
 public class FileLogger : ILogger
 {
@@ -14,7 +12,7 @@ public class FileLogger : ILogger
         _filePath = filePath;
     }
 
-    public void Log(string message, SeverityLevel severity)
+    public void Log(string message, int severity)
     {
         var writer = new StreamWriter(_filePath, true);
         writer.WriteLine($"{severity} | {DateTime.Now} | {message}");

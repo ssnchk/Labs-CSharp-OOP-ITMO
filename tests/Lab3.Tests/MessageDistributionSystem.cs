@@ -5,10 +5,9 @@ using Itmo.ObjectOrientedProgramming.Lab3.Loggers;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 using Itmo.ObjectOrientedProgramming.Lab3.Messengers;
 using Itmo.ObjectOrientedProgramming.Lab3.ResultTypes;
-using Itmo.ObjectOrientedProgramming.Lab3.Severity;
 using Itmo.ObjectOrientedProgramming.Lab3.Topics;
 using Itmo.ObjectOrientedProgramming.Lab3.Users;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 namespace Lab3.Tests;
@@ -19,9 +18,9 @@ public class MessageDistributionSystem
     public void WhenUserReceiveMessageItShouldBeUnread()
     {
         // Arrange
-        var message1 = new Message("Title1", "Body1", SeverityLevel.Info);
-        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
-        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+        var message1 = new Message("Title1", "Body1", 1);
+        var message2 = new Message("Title2", "Body2", 2);
+        var message3 = new Message("Title3", "Body3", 3);
 
         var user = new User();
 
@@ -33,9 +32,9 @@ public class MessageDistributionSystem
         addressee.ReceiveMessage(message3);
 
         // Assert
-        foreach (MessageWithReadStatus message in user.Messages)
+        foreach (MessageStatus status in user.Messages.Values)
         {
-            Assert.False(message.IsRead);
+            Assert.False(status.IsRead);
         }
     }
 
@@ -43,9 +42,9 @@ public class MessageDistributionSystem
     public void WhenUserReceiveMessageAndMarkItAsReadItShouldBeRead()
     {
         // Arrange
-        var message1 = new Message("Title1", "Body1", SeverityLevel.Info);
-        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
-        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+        var message1 = new Message("Title1", "Body1", 1);
+        var message2 = new Message("Title2", "Body2", 2);
+        var message3 = new Message("Title3", "Body3", 3);
 
         var user = new User();
 
@@ -56,15 +55,15 @@ public class MessageDistributionSystem
         addressee.ReceiveMessage(message2);
         addressee.ReceiveMessage(message3);
 
-        foreach (MessageWithReadStatus message in user.Messages)
+        foreach (MessageStatus status in user.Messages.Values)
         {
-            message.MarkAsRead();
+            status.MarkAsRead();
         }
 
         // Assert
-        foreach (MessageWithReadStatus message in user.Messages)
+        foreach (MessageStatus status in user.Messages.Values)
         {
-            Assert.True(message.IsRead);
+            Assert.True(status.IsRead);
         }
     }
 
@@ -72,9 +71,9 @@ public class MessageDistributionSystem
     public void WhenUserUserMarkReadMessageAsReadItShouldReturnFail()
     {
         // Arrange
-        var message1 = new Message("Title1", "Body1", SeverityLevel.Info);
-        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
-        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+        var message1 = new Message("Title1", "Body1", 1);
+        var message2 = new Message("Title2", "Body2", 2);
+        var message3 = new Message("Title3", "Body3", 3);
 
         var user = new User();
 
@@ -85,15 +84,15 @@ public class MessageDistributionSystem
         addressee.ReceiveMessage(message2);
         addressee.ReceiveMessage(message3);
 
-        foreach (MessageWithReadStatus message in user.Messages)
+        foreach (MessageStatus status in user.Messages.Values)
         {
-            message.MarkAsRead();
+            status.MarkAsRead();
         }
 
         // Assert
-        foreach (MessageWithReadStatus message in user.Messages)
+        foreach (MessageStatus status in user.Messages.Values)
         {
-            Assert.IsType<MarkAsReadResult.Failure>(message.MarkAsRead());
+            Assert.IsType<MarkAsReadResult.Failure>(status.MarkAsRead());
         }
     }
 
@@ -101,14 +100,14 @@ public class MessageDistributionSystem
     public void FilteredAddresseeShouldNotReceiveUnfilteredMessage()
     {
         // Arrange
-        var message1 = new Message("Title1", "Body1", SeverityLevel.Debug);
-        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
-        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+        var message1 = new Message("Title1", "Body1", 1);
+        var message2 = new Message("Title2", "Body2", 2);
+        var message3 = new Message("Title3", "Body3", 3);
 
-        var mockUser = new Mock<IUser>();
+        IUser mockUser = Substitute.For<IUser>();
 
-        var addressee = new AddresseeUser(mockUser.Object);
-        var filteredAddressee = new FilteredAddressee(addressee, SeverityLevel.Info);
+        var addressee = new AddresseeUser(mockUser);
+        var filteredAddressee = new FilteredAddressee(addressee, (a) => a == 1);
 
         // Act
         filteredAddressee.ReceiveMessage(message1);
@@ -116,22 +115,22 @@ public class MessageDistributionSystem
         filteredAddressee.ReceiveMessage(message3);
 
         // Assert
-        Assert.Single(mockUser.Invocations);
+        mockUser.Received(1).ReceiveMessage(Arg.Any<Message>());
     }
 
     [Fact]
     public void LoggedAddresseeShouldLogReceivedMessage()
     {
         // Arrange
-        var message1 = new Message("Title1", "Body1", SeverityLevel.Debug);
-        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
-        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+        var message1 = new Message("Title1", "Body1", 1);
+        var message2 = new Message("Title2", "Body2", 2);
+        var message3 = new Message("Title3", "Body3", 3);
 
-        var mockLogger = new Mock<ILogger>();
+        ILogger mockLogger = Substitute.For<ILogger>();
 
         var user = new User();
         var addressee = new AddresseeUser(user);
-        var loggingAddressee = new LoggingAddressee(addressee, mockLogger.Object);
+        var loggingAddressee = new LoggingAddressee(addressee, mockLogger);
 
         // Act
         loggingAddressee.ReceiveMessage(message1);
@@ -139,20 +138,20 @@ public class MessageDistributionSystem
         loggingAddressee.ReceiveMessage(message3);
 
         // Assert
-        Assert.Equal(3, mockLogger.Invocations.Count);
+        mockLogger.Received(3).Log(Arg.Any<string>(), Arg.Any<int>());
     }
 
     [Fact]
     public void MessengerShouldReceiveMessage()
     {
         // Arrange
-        var message1 = new Message("Title1", "Body1", SeverityLevel.Debug);
-        var message2 = new Message("Title2", "Body2", SeverityLevel.Info);
-        var message3 = new Message("Title3", "Body3", SeverityLevel.Fatal);
+        var message1 = new Message("Title1", "Body1", 1);
+        var message2 = new Message("Title2", "Body2", 2);
+        var message3 = new Message("Title3", "Body3", 3);
 
-        var mockMessenger = new Mock<IMessenger>();
+        IMessenger mockMessenger = Substitute.For<IMessenger>();
 
-        var addressee = new AddresseeMessenger(mockMessenger.Object);
+        var addressee = new AddresseeMessenger(mockMessenger);
 
         // Act
         addressee.ReceiveMessage(message1);
@@ -160,20 +159,19 @@ public class MessageDistributionSystem
         addressee.ReceiveMessage(message3);
 
         // Assert
-        Assert.Equal(3, mockMessenger.Invocations.Count);
+        mockMessenger.Received(3).ReceiveMessage(Arg.Any<Message>());
     }
 
     [Fact]
     public void WhenTopicHasOneFilteredAddresseeAndOneUnfilteredAddresseeItShouldReceiveOneMessage()
     {
         // Arrange
-        var message = new Message("Title1", "Body1", SeverityLevel.Debug);
+        var message = new Message("Title1", "Body1", 1);
 
-        var mockUser = new Mock<IUser>();
-        mockUser.Setup(u => u.ReceiveMessage(It.IsAny<Message>()));
+        IUser mockUser = Substitute.For<IUser>();
 
-        var addressee = new AddresseeUser(mockUser.Object);
-        var filteredAddressee = new FilteredAddressee(addressee, SeverityLevel.Info);
+        var addressee = new AddresseeUser(mockUser);
+        var filteredAddressee = new FilteredAddressee(addressee, (a) => a == 0);
 
         var topic = new Topic("Topic");
 
@@ -184,6 +182,6 @@ public class MessageDistributionSystem
         topic.SendMessage(message);
 
         // Assert
-        Assert.Single(mockUser.Invocations);
+        mockUser.Received(1).ReceiveMessage(Arg.Any<Message>());
     }
 }

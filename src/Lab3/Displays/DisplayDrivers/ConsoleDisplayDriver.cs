@@ -5,12 +5,20 @@ namespace Itmo.ObjectOrientedProgramming.Lab3.Displays.DisplayDrivers;
 
 public class ConsoleDisplayDriver : IDisplayDriver
 {
-    private Color _color = Color.Black;
+    private Color? _color;
 
     public void Display(Message message)
     {
-        Console.WriteLine(SetColorForString(message.Title));
-        Console.WriteLine(SetColorForString(message.Body));
+        if (_color is not null)
+        {
+            Console.WriteLine(SetColorForString(message.Title, _color.Value));
+            Console.WriteLine(SetColorForString(message.Body, _color.Value));
+
+            return;
+        }
+
+        Console.WriteLine(message.Title);
+        Console.WriteLine(message.Body);
     }
 
     public void Clear()
@@ -23,8 +31,8 @@ public class ConsoleDisplayDriver : IDisplayDriver
         _color = color;
     }
 
-    private string SetColorForString(string str)
+    private string SetColorForString(string str, Color color)
     {
-        return Crayon.Output.Rgb(_color.R, _color.G, _color.B).Text(str);
+        return Crayon.Output.Rgb(color.R, color.G, color.B).Text(str);
     }
 }

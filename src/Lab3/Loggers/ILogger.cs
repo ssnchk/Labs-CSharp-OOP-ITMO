@@ -1,8 +1,6 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab3.Severity;
-
-namespace Itmo.ObjectOrientedProgramming.Lab3.Loggers;
+﻿namespace Itmo.ObjectOrientedProgramming.Lab3.Loggers;
 
 public interface ILogger
 {
-    public void Log(string message, SeverityLevel severity);
+    public void Log(string message, int severity);
 }

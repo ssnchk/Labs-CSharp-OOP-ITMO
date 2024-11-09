@@ -4,12 +4,12 @@ namespace Itmo.ObjectOrientedProgramming.Lab3.Users;
 
 public class User : IUser
 {
-    private readonly List<MessageWithReadStatus> _messages = [];
+    private readonly Dictionary<Message, MessageStatus> _messages = [];
 
-    public IReadOnlyList<MessageWithReadStatus> Messages => _messages;
+    public IReadOnlyDictionary<Message, MessageStatus> Messages => _messages;
 
     public void ReceiveMessage(Message message)
     {
-        _messages.Add(new MessageWithReadStatus(message));
+        _messages[message] = new MessageStatus();
     }
 }

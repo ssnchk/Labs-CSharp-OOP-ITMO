@@ -7,17 +7,25 @@ public class FileDisplayDriver : IDisplayDriver
 {
     private readonly string _filePath;
 
-    private Color _color = Color.Black;
+    private Color? _color;
 
     public FileDisplayDriver(string filePath)
     {
-        this._filePath = filePath;
+        _filePath = filePath;
     }
 
     public void Display(Message message)
     {
-        WriteColoredStringToFile(_color, message.Title);
-        WriteColoredStringToFile(_color, message.Body);
+        if (_color is not null)
+        {
+            WriteColoredStringToFile(_color.Value, message.Title);
+            WriteColoredStringToFile(_color.Value, message.Body);
+
+            return;
+        }
+
+        WriteStringToFile(message.Title);
+        WriteStringToFile(message.Body);
     }
 
     public void Clear()
@@ -33,9 +41,13 @@ public class FileDisplayDriver : IDisplayDriver
     private void WriteColoredStringToFile(Color color, string text)
     {
         string ansiColorCode = $"\u001b[38;2;{color.R};{color.G};{color.B}m";
-
         string coloredText = $"{ansiColorCode}{text}";
 
-        File.AppendAllText(_filePath, coloredText);
+        WriteStringToFile(coloredText);
+    }
+
+    private void WriteStringToFile(string text)
+    {
+        File.AppendAllText(_filePath, text);
     }
 }

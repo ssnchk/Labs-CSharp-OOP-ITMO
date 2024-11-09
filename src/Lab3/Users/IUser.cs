@@ -1,5 +1,8 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab3.Models;
+﻿using Itmo.ObjectOrientedProgramming.Lab3.Messages;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Users;
 
-public interface IUser : IRecipient { }
+public interface IUser
+{
+    void ReceiveMessage(Message message);
+}
