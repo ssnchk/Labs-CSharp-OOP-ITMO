@@ -1,6 +1,9 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab4;
 using Itmo.ObjectOrientedProgramming.Lab4.CommandHandlers;
 using Itmo.ObjectOrientedProgramming.Lab4.Commands;
+using Itmo.ObjectOrientedProgramming.Lab4.Commands.ConnectCommands;
+using Itmo.ObjectOrientedProgramming.Lab4.Commands.FileCommands;
+using Itmo.ObjectOrientedProgramming.Lab4.Commands.TreeCommands;
 using Xunit;
 
 namespace Lab4.Tests;
@@ -11,7 +14,7 @@ public class FileSystemTests
     public void ConnectCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> requestForConnect = ["connect", "some_address", "-m", "local"];
         using IEnumerator<string> requestForConnectEnumerator = requestForConnect.GetEnumerator();
@@ -35,7 +38,7 @@ public class FileSystemTests
     public void DisconnectCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request = ["disconnect"];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -52,11 +55,11 @@ public class FileSystemTests
     public void TreeGoToCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "tree", "goto", "second_inner_folder"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -75,11 +78,11 @@ public class FileSystemTests
     public void TreeListCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "tree", "list", "-d", "2"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -98,11 +101,11 @@ public class FileSystemTests
     public void FileShowCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "file", "show", "file.txt", "-m", "console"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -121,11 +124,11 @@ public class FileSystemTests
     public void FileCopyCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "file", "copy", "file.txt", "new_file.txt"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -144,11 +147,11 @@ public class FileSystemTests
     public void FileDeleteCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "file", "delete", "any_file.txt"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -167,11 +170,11 @@ public class FileSystemTests
     public void FileRenameCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "file", "rename", "any_file.txt", "new_file.txt"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();
@@ -190,11 +193,11 @@ public class FileSystemTests
     public void FileMoveCommandTest()
     {
         // Arrange
-        ICommandHandler chain = Program.CreateParserChain();
+        ICommandHandler chain = ParserCreator.CreateParser();
 
         List<string> request =
         [
-            "connect", "C:\\Users\\30050\\RiderProjects\\ssnchk\\tests\\Lab4.Tests\\sample_folder", "-m", "local",
+            "connect", @"C:\Users\30050\RiderProjects\ssnchk\tests\Lab4.Tests\sample_folder", "-m", "local",
             "file", "move", "any_file.txt", "new_file.txt"
         ];
         using IEnumerator<string> requestEnumerator = request.GetEnumerator();

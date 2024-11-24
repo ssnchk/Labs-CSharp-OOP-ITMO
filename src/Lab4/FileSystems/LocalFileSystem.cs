@@ -1,4 +1,5 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab4.FileSystemStructure;
+﻿using Itmo.ObjectOrientedProgramming.Lab4.FileSystems.ResultTypes;
+using Itmo.ObjectOrientedProgramming.Lab4.FileSystemStructure;
 using Itmo.ObjectOrientedProgramming.Lab4.FileSystemVisitors;
 using Itmo.ObjectOrientedProgramming.Lab4.ValueTypes;
 
@@ -12,24 +13,18 @@ public class LocalFileSystem : IFileSystem
 
     public LocalFileSystem(string address)
     {
-        if (!Directory.Exists(address))
-            throw new DirectoryNotFoundException($"Директория не найдена: {address}");
-
         _address = address;
         _currentDirectory = address;
     }
 
-    public void ChangeDirectory(string path)
+    public ChangeDirectoryResult ChangeDirectory(string path)
     {
-        string absolutePath = ParsePathToAbsolute(_address, path);
+        _currentDirectory = path;
 
-        if (!Directory.Exists(absolutePath))
-            throw new DirectoryNotFoundException($"Директория не найдена: {path}");
-
-        _currentDirectory = absolutePath;
+        return new ChangeDirectoryResult.Success();
     }
 
-    public void ListDirectory(TreeDepth depth)
+    public ListDirectoryResult ListDirectory(TreeDepth depth)
     {
         var factory = new FileSystemComponentFactory();
         IFileSystemComponent component = factory.Create(_currentDirectory);
@@ -37,70 +32,64 @@ public class LocalFileSystem : IFileSystem
         var visitor = new ConsoleVisitor();
 
         component.Accept(visitor);
+
+        return new ListDirectoryResult.Success();
     }
 
-    public string ReadFile(string path)
+    public ReadFileResult ReadFile(string path)
     {
-        string absolutePath = ParsePathToAbsolute(_currentDirectory, path);
-
-        if (!File.Exists(absolutePath))
-            throw new FileNotFoundException($"Файл не найден: {path}");
-
-        return File.ReadAllText(absolutePath);
+        return new ReadFileResult.Success(File.ReadAllText(path));
     }
 
-    public void MoveFile(string sourcePath, string destinationPath)
+    public MoveFileResult MoveFile(string sourcePath, string destinationPath)
     {
-        string absoluteSourcePath = ParsePathToAbsolute(_currentDirectory, sourcePath);
-        string absoluteDestinationPath = ParsePathToAbsolute(_currentDirectory, destinationPath);
+        File.Move(sourcePath, destinationPath);
 
-        if (!File.Exists(absoluteSourcePath))
-            throw new FileNotFoundException($"Файл не найден: {sourcePath}");
-
-        if (!Directory.Exists(absoluteDestinationPath))
-            throw new DirectoryNotFoundException($"Директория не найдена: {destinationPath}");
-
-        File.Move(absoluteSourcePath, absoluteDestinationPath);
+        return new MoveFileResult.Success();
     }
 
-    public void CopyFile(string sourcePath, string destinationPath)
+    public CopyFileResult CopyFile(string sourcePath, string destinationPath)
     {
-        string absoluteSourcePath = ParsePathToAbsolute(_currentDirectory, sourcePath);
-        string absolutDestinationPath = ParsePathToAbsolute(_currentDirectory, destinationPath);
+        File.Copy(sourcePath, destinationPath);
 
-        if (!File.Exists(absoluteSourcePath))
-            throw new FileNotFoundException($"Файл не найден: {sourcePath}");
-
-        if (!Directory.Exists(absolutDestinationPath))
-            throw new DirectoryNotFoundException($"Директория не найдена: {destinationPath}");
-
-        File.Copy(absoluteSourcePath, absolutDestinationPath);
+        return new CopyFileResult.Success();
     }
 
-    public void DeleteFile(string path)
+    public DeleteFileResult DeleteFile(string path)
     {
-        string absolutePath = ParsePathToAbsolute(_currentDirectory, path);
+        File.Delete(path);
 
-        if (!File.Exists(absolutePath))
-            throw new FileNotFoundException($"Файл не найден: {path}");
-
-        File.Delete(absolutePath);
+        return new DeleteFileResult.Success();
     }
 
-    public void RenameFile(string path, string newName)
+    public RenameFileResult RenameFile(string path, string newName)
     {
-        string absolutePath = ParsePathToAbsolute(_currentDirectory, path);
-        string? directoryName = Path.GetDirectoryName(absolutePath);
+        string? directoryName = Path.GetDirectoryName(path);
         string newFilePath = Path.Combine(directoryName ?? string.Empty, newName);
 
-        if (!File.Exists(absolutePath))
-            throw new FileNotFoundException($"Файл не найден: {path}");
+        File.Move(path, newFilePath);
 
-        File.Move(absolutePath, newFilePath);
+        return new RenameFileResult.Success();
     }
 
-    private string ParsePathToAbsolute(string basePath, string relativeOrAbsolutePath)
-        => Path.IsPathRooted(relativeOrAbsolutePath)
-            ? relativeOrAbsolutePath
-            : Path.Combine(basePath, relativeOrAbsolutePath);
+    public string ParsePathToAbsolute(string path)
+        => Path.IsPathRooted(path)
+            ? path
+            : Path.Combine(_address, path);
+
+    public bool DirectoryExists(string path)
+    {
+        return Directory.Exists(path) && IsRootedToFileSystem(path);
+    }
+
+    public bool FileExists(string path)
+    {
+        return File.Exists(path) && IsRootedToFileSystem(path);
+    }
+
+    private bool IsRootedToFileSystem(string path)
+    {
+        return path.StartsWith(_address) && path.Length > _address.Length &&
+               path[_address.Length] == Path.DirectorySeparatorChar;
+    }
 }

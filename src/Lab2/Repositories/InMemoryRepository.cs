@@ -1,4 +1,6 @@
-﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+﻿using Itmo.ObjectOrientedProgramming.Lab2.Repositories.ResultTypes;
+
+namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
 
 public class InMemoryRepository<T> : IRepository<T>
     where T : IIdentifiable

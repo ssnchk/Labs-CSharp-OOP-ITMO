@@ -1,10 +1,11 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab4.ValueTypes;
+﻿using Itmo.ObjectOrientedProgramming.Lab4.FileSystems.ResultTypes;
+using Itmo.ObjectOrientedProgramming.Lab4.ValueTypes;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.FileSystems;
 
-public class FileSystemContext : IFileSystemContext
+public class FileSystemContext
 {
-    private IFileSystem? _fileSystem;
+    private IFileSystem _fileSystem = new NullFileSystem();
 
     public void Connect(IFileSystem fileSystem, string currentDirectory)
     {
@@ -13,55 +14,70 @@ public class FileSystemContext : IFileSystemContext
 
     public void Disconnect()
     {
-        _fileSystem = null;
+        _fileSystem = new NullFileSystem();
     }
 
-    public void ChangeDirectory(string path)
+    public ChangeDirectoryResult ChangeDirectory(string path)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
-        _fileSystem.ChangeDirectory(path);
+        return _fileSystem.ChangeDirectory(path);
     }
 
-    public void ListDirectory(TreeDepth depth)
+    public ListDirectoryResult ListDirectory(TreeDepth depth)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
-        _fileSystem.ListDirectory(depth);
+        return _fileSystem.ListDirectory(depth);
     }
 
-    public string ReadFile(string path)
+    public ReadFileResult ReadFile(string path)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
         return _fileSystem.ReadFile(path);
     }
 
-    public void MoveFile(string sourcePath, string destinationPath)
+    public MoveFileResult MoveFile(string sourcePath, string destinationPath)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
-        _fileSystem.MoveFile(sourcePath, destinationPath);
+        return _fileSystem.MoveFile(sourcePath, destinationPath);
     }
 
-    public void CopyFile(string sourcePath, string destinationPath)
+    public CopyFileResult CopyFile(string sourcePath, string destinationPath)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
-        _fileSystem.CopyFile(sourcePath, destinationPath);
+        return _fileSystem.CopyFile(sourcePath, destinationPath);
     }
 
-    public void DeleteFile(string path)
+    public DeleteFileResult DeleteFile(string path)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
-        _fileSystem.DeleteFile(path);
+        return _fileSystem.DeleteFile(path);
     }
 
-    public void RenameFile(string path, string newName)
+    public RenameFileResult RenameFile(string path, string newName)
     {
         ArgumentNullException.ThrowIfNull(_fileSystem, "File system is not connected");
 
-        _fileSystem.RenameFile(path, newName);
+        return _fileSystem.RenameFile(path, newName);
+    }
+
+    public string ParsePathToAbsolute(string path)
+    {
+        return _fileSystem.ParsePathToAbsolute(path);
+    }
+
+    public bool DirectoryExists(string path)
+    {
+        return _fileSystem.DirectoryExists(path);
+    }
+
+    public bool FileExists(string path)
+    {
+        return _fileSystem.FileExists(path);
     }
 }

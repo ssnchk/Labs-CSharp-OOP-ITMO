@@ -1,4 +1,4 @@
-﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories;
+﻿namespace Itmo.ObjectOrientedProgramming.Lab2.Repositories.ResultTypes;
 
 public abstract record class AddItemResult
 {

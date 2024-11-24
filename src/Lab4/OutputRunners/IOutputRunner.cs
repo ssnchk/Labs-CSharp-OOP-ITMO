@@ -2,5 +2,5 @@
 
 public interface IOutputRunner
 {
-    void Run(IEnumerable<string> args);
+    void Run();
 }

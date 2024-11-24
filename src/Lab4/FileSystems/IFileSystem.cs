@@ -1,20 +1,27 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab4.ValueTypes;
+﻿using Itmo.ObjectOrientedProgramming.Lab4.FileSystems.ResultTypes;
+using Itmo.ObjectOrientedProgramming.Lab4.ValueTypes;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.FileSystems;
 
 public interface IFileSystem
 {
-    void ChangeDirectory(string path);
+    ChangeDirectoryResult ChangeDirectory(string path);
 
-    void ListDirectory(TreeDepth depth);
+    ListDirectoryResult ListDirectory(TreeDepth depth);
 
-    string ReadFile(string path);
+    ReadFileResult ReadFile(string path);
 
-    void MoveFile(string sourcePath, string destinationPath);
+    MoveFileResult MoveFile(string sourcePath, string destinationPath);
 
-    void CopyFile(string sourcePath, string destinationPath);
+    CopyFileResult CopyFile(string sourcePath, string destinationPath);
 
-    void DeleteFile(string path);
+    DeleteFileResult DeleteFile(string path);
 
-    void RenameFile(string path, string newName);
+    RenameFileResult RenameFile(string path, string newName);
+
+    string ParsePathToAbsolute(string path);
+
+    bool DirectoryExists(string path);
+
+    bool FileExists(string path);
 }

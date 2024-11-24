@@ -9,4 +9,8 @@
       <Folder Include="FileSystemStructure\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="SourceKit.Generators.Builder" />
+    </ItemGroup>
+
 </Project>

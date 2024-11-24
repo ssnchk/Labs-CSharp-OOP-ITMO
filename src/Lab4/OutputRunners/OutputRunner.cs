@@ -6,21 +6,26 @@ namespace Itmo.ObjectOrientedProgramming.Lab4.OutputRunners;
 
 public class OutputRunner : IOutputRunner
 {
+    private readonly ArgumentSeparator _separator;
     private readonly ICommandHandler _commandHandler;
-    private readonly IFileSystemContext _fileSystemContext = new FileSystemContext();
+    private readonly FileSystemContext _fileSystemContext = new FileSystemContext();
 
-    public OutputRunner(ICommandHandler commandHandler)
+    public OutputRunner(ICommandHandler commandHandler, ArgumentSeparator separator)
     {
         _commandHandler = commandHandler;
+        _separator = separator;
     }
 
-    public void Run(IEnumerable<string> args)
+    public void Run()
     {
-        using IEnumerator<string> request = args.GetEnumerator();
+        string? input;
 
-        while (request.MoveNext())
+        while (true)
         {
-            ICommand? command = _commandHandler.Handle(request);
+            input = Console.ReadLine();
+
+            ICommand? command = _commandHandler.Handle(
+                _separator.Separate(input));
 
             if (command is null)
             {
