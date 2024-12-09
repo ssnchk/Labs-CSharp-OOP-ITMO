@@ -6,10 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Itmo.Dev.Platform.Postgres" Version="1.1.174" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-        <PackageReference Include="Npgsql" Version="9.0.2" />
-        <PackageReference Include="Spectre.Console" Version="0.49.1" />
+      <PackageReference Include="Itmo.Dev.Platform.Postgres" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+      <PackageReference Include="Npgsql" />
+      <PackageReference Include="Spectre.Console" />
     </ItemGroup>
 
 </Project>
