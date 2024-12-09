@@ -2,35 +2,35 @@
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.BankAccounts.ResultTypes;
 using Spectre.Console;
 
-namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccount.Withdraw;
+namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccounts.Deposit;
 
-public class WithdrawScenario : IScenario
+public class DepositScenario : IScenario
 {
     private readonly IBankAccountService _service;
     private readonly ICurrentBankAccountService _currentBankAccount;
 
-    public WithdrawScenario(IBankAccountService service, ICurrentBankAccountService currentBankAccount)
+    public DepositScenario(IBankAccountService service, ICurrentBankAccountService currentBankAccount)
     {
         _service = service;
         _currentBankAccount = currentBankAccount;
     }
 
-    public string Name => "Withdraw";
+    public string Name => "Deposit";
 
     public void Run()
     {
         if (_currentBankAccount.AccountId is null)
             throw new ArgumentOutOfRangeException(nameof(_currentBankAccount.AccountId));
 
-        long withdrawAmount = AnsiConsole.Ask<long>("Enter withdraw amount");
+        long depositAmount = AnsiConsole.Ask<long>("Enter deposit amount");
 
-        WithdrawResult result = _service
-            .Withdraw(_currentBankAccount.AccountId.Value, withdrawAmount);
+        DepositResult result = _service
+            .Deposit(_currentBankAccount.AccountId.Value, depositAmount);
 
         string message = result switch
         {
-            WithdrawResult.Success => "Successful deposit",
-            WithdrawResult.Failure failure => failure.Message,
+            DepositResult.Success => "Successful deposit",
+            DepositResult.Failure failure => failure.Message,
             _ => throw new ArgumentOutOfRangeException(nameof(result)),
         };
 

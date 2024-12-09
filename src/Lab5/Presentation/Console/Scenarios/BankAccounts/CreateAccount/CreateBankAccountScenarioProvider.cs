@@ -3,7 +3,7 @@ using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.User;
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.Users;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccount.CreateAccount;
+namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccounts.CreateAccount;
 
 public class CreateBankAccountScenarioProvider : IScenarioProvider
 {

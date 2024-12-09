@@ -10,7 +10,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab5.Application.Application.Extensions
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services
             .AddScoped<IBankAccountService, BankAccountService>()
@@ -24,5 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<CurrentUserTypeManager>();
         services.AddScoped<ICurrentUserTypeService>(
             provider => provider.GetRequiredService<CurrentUserTypeManager>());
+
+        return services;
     }
 }

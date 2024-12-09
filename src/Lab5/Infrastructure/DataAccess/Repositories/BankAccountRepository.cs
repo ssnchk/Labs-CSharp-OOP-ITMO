@@ -27,14 +27,11 @@ public class BankAccountRepository : IBankAccountRepository
                            where bank_account_id = :id
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
-            .GetAwaiter()
-            .GetResult();
+        NpgsqlConnection connection = _connectionProvider
+                                    .GetConnectionAsync(default)
+                                    .AsTask()
+                                    .GetAwaiter()
+                                    .GetResult();
 
         using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
             .AddParameter("id", id);
@@ -59,12 +56,9 @@ public class BankAccountRepository : IBankAccountRepository
                            where bank_account_id = :bank_account_id
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
             .GetAwaiter()
             .GetResult();
 
@@ -89,12 +83,9 @@ public class BankAccountRepository : IBankAccountRepository
                            (:bank_account_id, :bank_account_pin_code, :balance)
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
             .GetAwaiter()
             .GetResult();
 

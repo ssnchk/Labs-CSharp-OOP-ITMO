@@ -1,18 +1,20 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.BankAccounts;
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.User;
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.Users;
-using Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccount.Deposit;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccount.Withdraw;
+namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccounts.CheckHistory;
 
-public class WithdrawScenarioProvider : IScenarioProvider
+public class CheckHistoryScenarioProvider : IScenarioProvider
 {
     private readonly IBankAccountService _service;
     private readonly ICurrentUserTypeService _currentUser;
     private readonly ICurrentBankAccountService _currentAccountService;
 
-    public WithdrawScenarioProvider(IBankAccountService service, ICurrentUserTypeService currentUser, ICurrentBankAccountService currentAccountService)
+    public CheckHistoryScenarioProvider(
+        IBankAccountService service,
+        ICurrentUserTypeService currentUser,
+        ICurrentBankAccountService currentAccountService)
     {
         _service = service;
         _currentUser = currentUser;
@@ -27,7 +29,7 @@ public class WithdrawScenarioProvider : IScenarioProvider
             return false;
         }
 
-        scenario = new DepositScenario(_service, _currentAccountService);
+        scenario = new CheckHistoryScenario(_service, _currentAccountService);
         return true;
     }
 }

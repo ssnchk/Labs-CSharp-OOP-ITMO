@@ -18,19 +18,16 @@ public class OperationRepository : IOperationsRepository
     public IEnumerable<Operation> GetOperationsByBankAccountId(long bankAccountId)
     {
         const string sql = """
-                           select bank_account_operations_id,operation_type, amount, date 
+                           select bank_account_operations_id, type, amount, date 
                            from bank_account_operations
                            where bank_account_id = :bankAccountId
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
-            .GetAwaiter()
-            .GetResult();
+        NpgsqlConnection connection = _connectionProvider
+                                            .GetConnectionAsync(default)
+                                            .AsTask()
+                                            .GetAwaiter()
+                                            .GetResult();
 
         using NpgsqlCommand command = new NpgsqlCommand(sql, connection)
             .AddParameter("bankAccountId", bankAccountId);
@@ -57,12 +54,9 @@ public class OperationRepository : IOperationsRepository
                            (:bank_account_operations_id, :bankAccountId, :operationType, :amount, :date)
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
             .GetAwaiter()
             .GetResult();
 

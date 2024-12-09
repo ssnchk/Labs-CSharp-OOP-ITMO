@@ -3,7 +3,7 @@ using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.BankAccounts.Res
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.BankAccounts.Operations;
 using Spectre.Console;
 
-namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccount.CheckHistory;
+namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccounts.CheckHistory;
 
 public class CheckHistoryScenario : IScenario
 {

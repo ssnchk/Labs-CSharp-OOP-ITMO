@@ -3,7 +3,7 @@ using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.Admins.ResultTyp
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.BankAccounts;
 using Spectre.Console;
 
-namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccount.CreateAccount;
+namespace Itmo.ObjectOrientedProgramming.Lab5.Presentation.Console.Scenarios.BankAccounts.CreateAccount;
 
 public class CreateBankAccountScenario : IScenario
 {
@@ -25,7 +25,7 @@ public class CreateBankAccountScenario : IScenario
 
         string message = result switch
         {
-            CreateBankAccountResult.Success => "Successful login as User",
+            CreateBankAccountResult.Success success => $"Successfully created a new bank account with id: {success.BankAccount.Id}",
             CreateBankAccountResult.Failure failure => failure.Message,
             _ => throw new ArgumentOutOfRangeException(nameof(result)),
         };

@@ -1,6 +1,7 @@
 ﻿using Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.BankAccounts.ResultTypes;
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.BankAccounts.Operations;
 using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.IdGenerators;
+using Operation = Itmo.ObjectOrientedProgramming.Lab5.Application.Models.BankAccounts.Operations.Operation;
 
 namespace Itmo.ObjectOrientedProgramming.Lab5.Application.Models.BankAccounts;
 
@@ -14,6 +15,7 @@ public class BankAccount
 
     public BankAccount(PinCode pinCode)
     {
+        Balance = 0;
         PinCode = pinCode;
         Id = IdGenerator.GenerateNewId();
     }
@@ -28,7 +30,7 @@ public class BankAccount
 
     public long Id { get; }
 
-    public decimal Balance { get; private set; } = 0;
+    public decimal Balance { get; private set; }
 
     public void Deposit(decimal amount)
     {

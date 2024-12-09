@@ -18,17 +18,14 @@ public class AdminPasswordRepository : IAdminPasswordRepository
     {
         const string sql = """
                            select password
-                           from admin_password
+                           from admin_password;
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
-            .GetAwaiter()
-            .GetResult();
+        NpgsqlConnection connection = _connectionProvider
+                                            .GetConnectionAsync(default)
+                                            .AsTask()
+                                            .GetAwaiter()
+                                            .GetResult();
 
         using var command = new NpgsqlCommand(sql, connection);
 
@@ -48,12 +45,9 @@ public class AdminPasswordRepository : IAdminPasswordRepository
                            set password = :password
                            """;
 
-        ValueTask<NpgsqlConnection> task = _connectionProvider.GetConnectionAsync(default);
-
-        if (!task.IsCompletedSuccessfully)
-            throw new InvalidOperationException();
-
-        NpgsqlConnection connection = task
+        NpgsqlConnection connection = _connectionProvider
+            .GetConnectionAsync(default)
+            .AsTask()
             .GetAwaiter()
             .GetResult();
 

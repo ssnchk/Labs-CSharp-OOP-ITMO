@@ -4,7 +4,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab5.Application.Contracts.Admins.Resul
 
 public abstract record CreateBankAccountResult
 {
-    public sealed record Success(BankAccount Account) : CreateBankAccountResult;
+    public sealed record Success(BankAccount BankAccount) : CreateBankAccountResult;
 
     public sealed record Failure(string Message) : CreateBankAccountResult;
 }

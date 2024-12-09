@@ -29,6 +29,10 @@ public class AdminLoginScenario : IScenario
         };
 
         AnsiConsole.WriteLine(message);
+
+        if (result is LoginResult.Failure)
+            Environment.Exit(0);
+
         AnsiConsole.Ask<string>("Ok");
     }
 }

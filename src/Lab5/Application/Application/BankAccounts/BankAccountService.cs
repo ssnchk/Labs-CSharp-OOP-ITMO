@@ -87,7 +87,7 @@ public class BankAccountService : IBankAccountService
         return withdrawResult;
     }
 
-    private bool CheckIsChanged(BankAccount changedAccount, long id)
+    private bool CheckIsChanged(BankAccount changedBankAccount, long id)
     {
         BankAccount? account = _bankAccountRepository.FindBankAccountById(id);
 
@@ -96,6 +96,6 @@ public class BankAccountService : IBankAccountService
             return false;
         }
 
-        return account.Balance == changedAccount.Balance;
+        return account.Balance == changedBankAccount.Balance;
     }
 }
