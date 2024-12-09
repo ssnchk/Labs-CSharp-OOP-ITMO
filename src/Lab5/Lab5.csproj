@@ -12,4 +12,8 @@
       <PackageReference Include="Spectre.Console" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageVersion Update="Itmo.Dev.Platform.Postgres" Version="1.1.174" />
+    </ItemGroup>
+
 </Project>
