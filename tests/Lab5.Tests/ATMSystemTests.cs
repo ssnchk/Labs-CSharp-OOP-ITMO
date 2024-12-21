@@ -1,6 +1,7 @@
-﻿using Itmo.ObjectOrientedProgramming.Lab5.Application.Abstraction.Repositories;
-using Itmo.ObjectOrientedProgramming.Lab5.Application.Application.BankAccounts;
-using Itmo.ObjectOrientedProgramming.Lab5.Application.Models.BankAccounts;
+﻿using Lab5.Abstraction.Repositories;
+using Lab5.Application.BankAccounts;
+using Lab5.Contracts.BankAccounts;
+using Lab5.Models.BankAccounts;
 using NSubstitute;
 using Xunit;
 
@@ -13,18 +14,23 @@ public class ATMSystemTests
     {
         // Arrange
         IBankAccountRepository mockRepository = Substitute.For<IBankAccountRepository>();
+        IBankAccountOperationsService mockService = Substitute.For<IBankAccountOperationsService>();
 
-        var account = new BankAccount(1, new PinCode("1234"), 100, []);
+        var account = new BankAccount(1, new PinCode("1234"), 100);
         mockRepository.FindBankAccountById(1).Returns(account);
+        mockRepository.TryUpdateBankAccount(Arg.Any<BankAccount>()).Returns(true);
 
-        var service = new BankAccountService(mockRepository);
+        var resultAccount = new BankAccount(1, new PinCode("1234"), 1);
+
+        var service = new BankAccountService(mockRepository, mockService);
 
         // Act
         service.Withdraw(1, 99);
 
         // Assert
-        Assert.Equal(1, account.Balance);
-        mockRepository.Received(1).TryUpdateBankAccount(account);
+        mockRepository.Received(1)
+            .TryUpdateBankAccount(
+                Arg.Is<BankAccount>(a => Equals(a, resultAccount)));
     }
 
     [Fact]
@@ -32,17 +38,17 @@ public class ATMSystemTests
     {
         // Arrange
         IBankAccountRepository mockRepository = Substitute.For<IBankAccountRepository>();
+        IBankAccountOperationsService mockService = Substitute.For<IBankAccountOperationsService>();
 
-        var account = new BankAccount(1, new PinCode("1234"), 98, []);
+        var account = new BankAccount(1, new PinCode("1234"), 98);
         mockRepository.FindBankAccountById(1).Returns(account);
 
-        var service = new BankAccountService(mockRepository);
+        var service = new BankAccountService(mockRepository, mockService);
 
         // Act
         service.Withdraw(1, 99);
 
         // Assert
-        Assert.Equal(98, account.Balance);
         mockRepository.Received(0).TryUpdateBankAccount(account);
     }
 
@@ -51,17 +57,21 @@ public class ATMSystemTests
     {
         // Arrange
         IBankAccountRepository mockRepository = Substitute.For<IBankAccountRepository>();
+        IBankAccountOperationsService mockService = Substitute.For<IBankAccountOperationsService>();
 
-        var account = new BankAccount(1, new PinCode("1234"), 100, []);
+        var account = new BankAccount(1, new PinCode("1234"), 100);
         mockRepository.FindBankAccountById(1).Returns(account);
 
-        var service = new BankAccountService(mockRepository);
+        var resultAccount = new BankAccount(1, new PinCode("1234"), 200);
+
+        var service = new BankAccountService(mockRepository, mockService);
 
         // Act
         service.Deposit(1, 100);
 
         // Assert
-        Assert.Equal(200, account.Balance);
-        mockRepository.Received(1).TryUpdateBankAccount(account);
+        mockRepository.Received(1)
+            .TryUpdateBankAccount(
+                Arg.Is<BankAccount>(a => Equals(a, resultAccount)));
     }
 }
